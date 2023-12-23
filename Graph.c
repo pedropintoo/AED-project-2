@@ -215,8 +215,33 @@ Graph* GraphFromFile(FILE* f) {
   assert(f != NULL);
 
   // TO BE COMPLETED !!
-
-  return NULL;
+  int isDigraph;
+  fscanf(f,"%d",&isDigraph);
+  int isWeighted;
+  fscanf(f,"%d",&isWeighted);
+  int numVertices;
+  fscanf(f,"%d",&numVertices);
+  int numEdges;
+  fscanf(f,"%d",&numEdges);
+  
+  Graph* g = GraphCreate(numVertices,isDigraph,isWeighted);
+  
+  int vertex, adjVertex;
+  double weight;
+  for (int i = 0; i < numEdges; i++) {
+    fscanf(f,"%d %d",&vertex,&adjVertex);
+     
+    if (isWeighted) {
+      fscanf(f,"%lf",&weight); // must execute even if they are a self-loop
+      if (vertex != adjVertex) GraphAddWeightedEdge(g,vertex,adjVertex,weight); 
+    } else {
+      if (vertex != adjVertex) GraphAddEdge(g,vertex,adjVertex);
+    }
+    
+    
+  }
+  
+  return g;
 }
 
 // Graph

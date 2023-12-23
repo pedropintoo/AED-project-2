@@ -10,6 +10,7 @@
 
 int main(void) {
 
+  // GraphCopy
 	Graph* g01 = GraphCreate(6, 0, 1); // (numVertices, isDigraph, isWeighted)
 	Graph* g01_copy = GraphCopy(g01);
 	GraphAddWeightedEdge(g01, 1, 2,0);
@@ -23,6 +24,14 @@ int main(void) {
 
 	GraphDestroy(&g01);
 	GraphDestroy(&g01_copy);
+
+  // GraphGraphFromFile
+  printf("\n\n");
+  FILE* f = fopen("GRAPHS/SWtinyEWD.txt","r");
+  Graph* g02 = GraphFromFile(f);
+  GraphDisplay(g02);
+
+  GraphDestroy(&g02);
 
 	return 0;
 }

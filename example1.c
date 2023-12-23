@@ -20,6 +20,7 @@ int main(void) {
     GraphListAdjacents(g01, i);
   }
   printf("Remove edge (1,2)\n");
+  GraphRemoveEdge(g01,1,2); // missing!
   GraphDisplay(g01);
   for (int i = 0; i < 6; i++) {
     GraphListAdjacents(g01, i);

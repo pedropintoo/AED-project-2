@@ -308,10 +308,10 @@ unsigned int* GraphGetAdjacentsTo(const Graph* g, unsigned int v) {
 
   // Node in the list of vertices
   List* vertices = g->verticesList;
-  ListMove(vertices, v);
+  ListMove(vertices, v);  
   struct _Vertex* vPointer = ListGetCurrentItem(vertices);
   unsigned int numAdjVertices = vPointer->outDegree;
-
+  
   unsigned int* adjacent =
       (unsigned int*)calloc(1 + numAdjVertices, sizeof(unsigned int));
 
@@ -480,7 +480,13 @@ int GraphRemoveEdge(Graph* g, unsigned int v, unsigned int w) {
     if (edge->adjVertex == w) {
       ListRemoveCurrent(edgeList);
       g->numEdges--;
-      if (g->isDigraph) return 1; // In Digraphs we only remove in 1 direction!
+      vertex->outDegree--;
+      if (g->isDigraph) {
+        ListMove(g->verticesList,w);
+        vertex = ListGetCurrentItem(g->verticesList);
+        vertex->inDegree--;
+        return 1; // In Digraphs we only remove in 1 direction!
+      }
       break;
     }
   }
@@ -495,6 +501,7 @@ int GraphRemoveEdge(Graph* g, unsigned int v, unsigned int w) {
     struct _Edge* edge = ListGetCurrentItem(edgeList);
     if (edge->adjVertex == v) {
       ListRemoveCurrent(edgeList);
+      vertex->outDegree--;
       break;
     }
   }

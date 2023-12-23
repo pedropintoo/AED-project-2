@@ -35,6 +35,9 @@ int main(void) {
   printf("After remove (6,3):\n");
   GraphRemoveEdge(g02,6,2);
   GraphDisplay(g02);
+  for (unsigned int i = 0; i < GraphGetNumVertices(g02); i++) {
+    GraphListAdjacents(g02, i);
+  }
 
   GraphDestroy(&g02);
 

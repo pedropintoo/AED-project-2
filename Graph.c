@@ -158,7 +158,7 @@ Graph* GraphCopy(const Graph* g) {
   assert(g != NULL);
 
   // TO BE COMPLETED !!
-  Graph* g_new = (Graph*)malloc(sizeof(struct _GraphHeader));
+  Graph* g_new = (Graph*)malloc(sizeof(struct _GraphHeader)); // can't use GraphCreate/GraphCreateComplete, because we can have Complete Graph weighted
   if (g_new == NULL) abort();
 
   g_new->isDigraph = g->isDigraph;

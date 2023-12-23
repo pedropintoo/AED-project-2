@@ -459,12 +459,47 @@ int GraphAddWeightedEdge(Graph* g, unsigned int v, unsigned int w,
   return _addEdge(g, v, w, weight);
 }
 
+// What's supposed to return?
 int GraphRemoveEdge(Graph* g, unsigned int v, unsigned int w) {
   assert(g != NULL);
 
   // TO BE COMPLETED !!
+  assert(v < ListGetSize(g->verticesList) && w < ListGetSize(g->verticesList));
+  // assert(GraphCheckInvariants(g)); // MUST BE UNCOMMENTED!!!
 
-  return 0;
+  ListMove(g->verticesList,v); // move to inicial vertex
+  struct _Vertex* vertex = ListGetCurrentItem(g->verticesList); 
+  List* edgeList = vertex->edgesList; // get the edgeList form input vertice
+  
+  if (ListIsEmpty(edgeList)) return 0; 
+  
+  ListMoveToHead(edgeList);
+  for (unsigned int i = 0; i < ListGetSize(edgeList); ListMoveToNext(edgeList), i++) {
+    struct _Edge* edge = ListGetCurrentItem(edgeList);
+    if (edge->adjVertex > w) return 0; // sorted list!! if adjVertex is greater -> not in the list!
+    if (edge->adjVertex == w) {
+      ListRemoveCurrent(edgeList);
+      g->numEdges--;
+      if (g->isDigraph) return 1; // In Digraphs we only remove in 1 direction!
+      break;
+    }
+  }
+  
+  // remove inverse direction edge
+  ListMove(g->verticesList,w); // move to final vertex
+  vertex = ListGetCurrentItem(g->verticesList); 
+  edgeList = vertex->edgesList; // get the edgeList form input vertice
+  
+  ListMoveToHead(edgeList);
+  for (unsigned int i = 0; i < ListGetSize(edgeList); ListMoveToNext(edgeList), i++) {
+    struct _Edge* edge = ListGetCurrentItem(edgeList);
+    if (edge->adjVertex == v) {
+      ListRemoveCurrent(edgeList);
+      break;
+    }
+  }
+  
+  return 1;
 }
 
 // CHECKING

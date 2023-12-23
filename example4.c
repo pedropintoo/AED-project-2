@@ -31,6 +31,11 @@ int main(void) {
   Graph* g02 = GraphFromFile(f);
   GraphDisplay(g02);
 
+  // GraphRemoveEdge
+  printf("After remove (6,3):\n");
+  GraphRemoveEdge(g02,6,2);
+  GraphDisplay(g02);
+
   GraphDestroy(&g02);
 
 	return 0;

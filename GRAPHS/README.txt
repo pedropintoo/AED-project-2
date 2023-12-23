@@ -13,11 +13,7 @@ EWD - Edge-Weighted Digraph - Grafo orientado com custos/pesos associados às ar
 
 ATENÇÃO:
 
-1 - Quando existem, os pesos das arestas são números reais.
-CONVERTER PARA INTEIROS, para podermos usar o nosso TAD!!
-Por exemplo, multiplicando por 100 e fazendo o cast para int.
-
-2 - Há lacetes nalguns dos ficheiros (vi = vj).
+Há lacetes nalguns dos ficheiros (vi = vj).
 Identificar na função de leitura e não acrescentar essas arestas.
 
 FORMATO:

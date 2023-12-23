@@ -215,7 +215,6 @@ Graph* GraphFromFile(FILE* f) {
   assert(f != NULL);
 
   // TO BE COMPLETED !!
-  
 
   return NULL;
 }

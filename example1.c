@@ -33,6 +33,7 @@ int main(void) {
   printf("The second graph:\n");
   GraphDisplay(dig01);
   printf("Remove edge (1,2)\n");
+  GraphRemoveEdge(dig01,1,2); // missing!
   GraphDisplay(dig01);
 
   Graph* g03 = GraphCreate(6, 0, 1);
@@ -42,6 +43,7 @@ int main(void) {
   printf("The third graph:\n");
   GraphDisplay(g03);
   printf("Remove edge (1,2)\n");
+  GraphRemoveEdge(g03,1,2); // missing!
   GraphDisplay(g03);
 
   GraphDestroy(&g01);

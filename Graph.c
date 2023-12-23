@@ -158,8 +158,57 @@ Graph* GraphCopy(const Graph* g) {
   assert(g != NULL);
 
   // TO BE COMPLETED !!
+  Graph* g_new = (Graph*)malloc(sizeof(struct _GraphHeader));
+  if (g_new == NULL) abort();
 
-  return NULL;
+  g_new->isDigraph = g->isDigraph;
+  g_new->isComplete = g->isComplete;
+  g_new->isWeighted = g->isWeighted;
+
+  g_new->numVertices = g->numVertices;
+  g_new->numEdges = g->numEdges;
+  
+  g_new->verticesList = ListCreate(graphVerticesComparator);
+  
+  ListMoveToHead(g->verticesList); // current = head
+
+  for (unsigned int i = 0; i < g->numVertices; i++) {
+    struct _Vertex* v_new = (struct _Vertex*)malloc(sizeof(struct _Vertex));
+    struct _Vertex* v = ListGetCurrentItem(g->verticesList);
+    
+    v_new->id = v->id;
+    v_new->inDegree = v->inDegree;
+    v_new->outDegree = v->outDegree;
+    List* adjList = v->edgesList;
+    v_new->edgesList = ListCreate(graphEdgesComparator);
+
+    ListMoveToHead(adjList);  
+    if (g->isWeighted) {
+      // v->outDegree -> number of adjacent vertices
+      for (unsigned int i = 0; i < v->outDegree; i++) {
+        struct _Edge* edge = ListGetCurrentItem(adjList);
+        
+        GraphAddWeightedEdge(g_new,v->id,edge->adjVertex,edge->weight);
+        ListMoveToNext(adjList); 
+      }
+      
+    } else {
+      // v->outDegree -> number of adjacent vertices
+      for (unsigned int i = 0; i < v->outDegree; i++) {
+        struct _Edge* edge = ListGetCurrentItem(adjList);
+        
+        GraphAddEdge(g_new,v->id,edge->adjVertex);
+        ListMoveToNext(adjList); 
+      }
+    }
+
+    ListInsert(g_new->verticesList,v_new); // add the copy to the list
+    ListMoveToNext(g->verticesList);
+  }
+
+  assert(g_new->numVertices == ListGetSize(g_new->verticesList));
+
+  return g_new;
 }
 
 Graph* GraphFromFile(FILE* f) {

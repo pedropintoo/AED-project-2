@@ -202,7 +202,6 @@ Graph* GraphCopy(const Graph* g) {
     }
   }
 
-
   assert(g_new->numVertices == ListGetSize(g_new->verticesList));
 
   return g_new;
@@ -462,48 +461,60 @@ int GraphRemoveEdge(Graph* g, unsigned int v, unsigned int w) {
 
   // TO BE COMPLETED !!
   assert(v < ListGetSize(g->verticesList) && w < ListGetSize(g->verticesList));
-  // assert(GraphCheckInvariants(g)); // MUST BE UNCOMMENTED!!!
+  // assert(GraphCheckInvariants(g));
 
-  ListMove(g->verticesList,v); // move to inicial vertex
-  struct _Vertex* vertex = ListGetCurrentItem(g->verticesList); 
-  List* edgeList = vertex->edgesList; // get the edgeList form input vertice
+  // Move to the initial vertex
+  ListMove(g->verticesList, v);
+  struct _Vertex* vertex = ListGetCurrentItem(g->verticesList);
+  List* edgeList = vertex->edgesList;
   
+  // If the edge list is empty, the edge does not exist
   if (ListIsEmpty(edgeList)) return 0; 
-  
+
+  // Move through the edge list to find the specified edge
   ListMoveToHead(edgeList);
   for (unsigned int i = 0; i < ListGetSize(edgeList); ListMoveToNext(edgeList), i++) {
     struct _Edge* edge = ListGetCurrentItem(edgeList);
-    if (edge->adjVertex > w) return 0; // sorted list!! if adjVertex is greater -> not in the list!
+
+    // If the adjacent vertex is greater than w, the edge is not in the list (sorted list!)
+    if (edge->adjVertex > w) return 0;
+
+    // If the adjacent vertex matches w, remove the edge
     if (edge->adjVertex == w) {
       ListRemoveCurrent(edgeList);
       g->numEdges--;
       vertex->outDegree--;
+
+      // In a directed graph, only remove the edge in one direction
       if (g->isDigraph) {
-        ListMove(g->verticesList,w);
+        ListMove(g->verticesList, w);
         vertex = ListGetCurrentItem(g->verticesList);
         vertex->inDegree--;
-        return 1; // In Digraphs we only remove in 1 direction!
+      } else {
+        // In an undirected graph, remove the inverse direction edge as well
+        ListMove(g->verticesList, w);
+        vertex = ListGetCurrentItem(g->verticesList);
+        edgeList = vertex->edgesList;
+
+        // Move through the edge list to find the inverse direction edge
+        ListMoveToHead(edgeList);
+        for (unsigned int j = 0; j < ListGetSize(edgeList); ListMoveToNext(edgeList), j++) {
+          struct _Edge* inverseEdge = ListGetCurrentItem(edgeList);
+
+          // If the adjacent vertex matches v, remove the inverse direction edge
+          if (inverseEdge->adjVertex == v) {
+            ListRemoveCurrent(edgeList);
+            vertex->outDegree--;
+            break;
+          }
+        }
       }
-      break;
+
+      return 1; // Edge removed successfully
     }
   }
-  
-  // remove inverse direction edge
-  ListMove(g->verticesList,w); // move to final vertex
-  vertex = ListGetCurrentItem(g->verticesList); 
-  edgeList = vertex->edgesList; // get the edgeList form input vertice
-  
-  ListMoveToHead(edgeList);
-  for (unsigned int i = 0; i < ListGetSize(edgeList); ListMoveToNext(edgeList), i++) {
-    struct _Edge* edge = ListGetCurrentItem(edgeList);
-    if (edge->adjVertex == v) {
-      ListRemoveCurrent(edgeList);
-      vertex->outDegree--;
-      break;
-    }
-  }
-  
-  return 1;
+
+  return 0; // Edge not found
 }
 
 // CHECKING

@@ -70,26 +70,34 @@ GraphTopoSort* GraphTopoSortComputeV1(Graph* g) {
   // TO BE COMPLETED
   
   Graph* g_copy = GraphCopy(g);
-  
-  unsigned int s = 0; // index of sequence
-  unsigned int selected;
-  do{
-    selected = 0;
-    for (unsigned int v = 0; v < GraphGetNumVertices(g_copy); v++) {
-      if ((topoSort->marked[v] = 0) && (GraphGetVertexInDegree(g_copy,v) == 0)) {
-        topoSort->vertexSequence[s++] = v; // save the sequence
-        topoSort->marked[v] = 1;
-        selected = 1;
 
-        unsigned int* adjacentsTo = GraphGetAdjacentsTo(g_copy,v); // element 0, stores the number of adjacent vertices
-        for (unsigned int i = 1; i < adjacentsTo[0]; i++) {
-          GraphRemoveEdge(g_copy,v,adjacentsTo[i]);
+  // index of sequence
+  unsigned int s = 0; 
+
+  // Iterate until all vertices are included in the topological sort
+  for (int selected = 1; selected; ) {
+    selected = 0;
+
+    // Iterate through vertices to find those with in-degree 0 and that is not marked
+    for (unsigned int v = 0; v < GraphGetNumVertices(g_copy); v++) {
+      if (!topoSort->marked[v] && GraphGetVertexInDegree(g_copy, v) == 0) {
+        // Save the vertex in the sequence
+        topoSort->vertexSequence[s++] = v;
+        topoSort->marked[v] = 1;  // Mark the vertex as visited
+        selected = 1;  // Set the flag to indicate a vertex is selected
+
+        // Remove outgoing edges from the selected vertex
+        unsigned int* adjacentsTo = GraphGetAdjacentsTo(g_copy, v);
+        for (unsigned int i = 1; i <= adjacentsTo[0]; i++) {
+          GraphRemoveEdge(g_copy, v, adjacentsTo[i]);
         }
 
+        break; // other selected vertex
       }
     }
-  } while(selected != 0);
+  }
 
+  // If the sequence includes all vertices, mark the result as valid
   if (s == topoSort->numVertices) topoSort->validResult = 1;
 
   GraphDestroy(&g_copy);

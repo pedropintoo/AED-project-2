@@ -166,45 +166,42 @@ Graph* GraphCopy(const Graph* g) {
   g_new->isWeighted = g->isWeighted;
 
   g_new->numVertices = g->numVertices;
-  g_new->numEdges = g->numEdges;
+  // g_new->numEdges = g->numEdges; // _addEdge increments it !!!
   
   g_new->verticesList = ListCreate(graphVerticesComparator);
   
-  ListMoveToHead(g->verticesList); // current = head
-
   for (unsigned int i = 0; i < g->numVertices; i++) {
+    ListMove(g->verticesList,i);
     struct _Vertex* v_new = (struct _Vertex*)malloc(sizeof(struct _Vertex));
     struct _Vertex* v = ListGetCurrentItem(g->verticesList);
     
-    v_new->id = v->id;
-    v_new->inDegree = v->inDegree;
-    v_new->outDegree = v->outDegree;
-    List* adjList = v->edgesList;
-    v_new->edgesList = ListCreate(graphEdgesComparator);
-
-    ListMoveToHead(adjList);  
-    if (g->isWeighted) {
-      // v->outDegree -> number of adjacent vertices
-      for (unsigned int i = 0; i < v->outDegree; i++) {
-        struct _Edge* edge = ListGetCurrentItem(adjList);
-        
-        GraphAddWeightedEdge(g_new,v->id,edge->adjVertex,edge->weight);
-        ListMoveToNext(adjList); 
-      }
-      
-    } else {
-      // v->outDegree -> number of adjacent vertices
-      for (unsigned int i = 0; i < v->outDegree; i++) {
-        struct _Edge* edge = ListGetCurrentItem(adjList);
-        
-        GraphAddEdge(g_new,v->id,edge->adjVertex);
-        ListMoveToNext(adjList); 
-      }
-    }
+    v_new->id = v->id; // only this because _addEdge, increments the other vars
+    
+    v_new->edgesList = ListCreate(graphEdgesComparator); // allocate memory!
 
     ListInsert(g_new->verticesList,v_new); // add the copy to the list
-    ListMoveToNext(g->verticesList);
   }
+  
+  // Add adjacent vertices
+  // Only after, because the _addEdge needs all vertex in verticesList!
+  for (unsigned int i = 0; i < g->numVertices; i++) {
+    ListMove(g->verticesList,i);
+    struct _Vertex* v = ListGetCurrentItem(g->verticesList);
+    List* edgesList = v->edgesList;
+
+    // v->outDegree -> number of adjacent vertices
+    for (unsigned int i = 0; i < v->outDegree; i++) {
+      ListMove(edgesList,i);
+      struct _Edge* e = ListGetCurrentItem(edgesList);
+
+      if (g->isWeighted) {
+        GraphAddWeightedEdge(g_new,v->id,e->adjVertex,e->weight);
+      } else {
+        GraphAddEdge(g_new,v->id,e->adjVertex);
+      }
+    }
+  }
+
 
   assert(g_new->numVertices == ListGetSize(g_new->verticesList));
 
@@ -513,9 +510,15 @@ int GraphRemoveEdge(Graph* g, unsigned int v, unsigned int w) {
 
 int GraphCheckInvariants(const Graph* g) {
   assert(g != NULL);
-  // TO BE COMPLETED !!
 
-  return 0;
+  // TO BE COMPLETED !!
+  unsigned int E = g->numEdges;
+  unsigned int V = g->numVertices;
+  List* verticesList = g->verticesList;
+
+  // ....
+
+  return 1;
 }
 
 // DISPLAYING on the console

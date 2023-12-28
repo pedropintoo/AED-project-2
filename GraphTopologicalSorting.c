@@ -34,7 +34,17 @@ static GraphTopoSort* _create(Graph* g) {
   GraphTopoSort* p = NULL;
 
   // TO BE COMPLETED
-  // ...
+  p = (GraphTopoSort*)malloc(sizeof(GraphTopoSort));
+  if (p == NULL) abort();
+
+  // calloc?
+  p->marked = (int*)calloc(GraphGetNumVertices(g),sizeof(int));
+  p->numIncomingEdges = (unsigned int*)calloc(GraphGetNumEdges(g),sizeof(unsigned int));
+  p->vertexSequence = (unsigned int*)calloc(GraphGetNumVertices(g),sizeof(unsigned int));
+
+  p->validResult = 0;
+  p->numVertices = GraphGetNumVertices(g);
+  p->graph = g;
 
   return p;
 }
@@ -58,7 +68,31 @@ GraphTopoSort* GraphTopoSortComputeV1(Graph* g) {
   // Build the topological sorting
 
   // TO BE COMPLETED
-  //...
+  
+  Graph* g_copy = GraphCopy(g);
+  
+  unsigned int s = 0; // index of sequence
+  unsigned int selected;
+  do{
+    selected = 0;
+    for (unsigned int v = 0; v < GraphGetNumVertices(g_copy); v++) {
+      if ((topoSort->marked[v] = 0) && (GraphGetVertexInDegree(g_copy,v) == 0)) {
+        topoSort->vertexSequence[s++] = v; // save the sequence
+        topoSort->marked[v] = 1;
+        selected = 1;
+
+        unsigned int* adjacentsTo = GraphGetAdjacentsTo(g_copy,v); // element 0, stores the number of adjacent vertices
+        for (unsigned int i = 1; i < adjacentsTo[0]; i++) {
+          GraphRemoveEdge(g_copy,v,adjacentsTo[i]);
+        }
+
+      }
+    }
+  } while(selected != 0);
+
+  if (s == topoSort->numVertices) topoSort->validResult = 1;
+
+  GraphDestroy(&g_copy);
 
   return topoSort;
 }

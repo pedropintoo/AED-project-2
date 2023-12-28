@@ -11,7 +11,7 @@
 int main(void) {
 
   // GraphCopy
-	Graph* g01 = GraphCreate(6, 0, 1); // (numVertices, isDigraph, isWeighted)
+	Graph* g01 = GraphCreate(6, 1, 1); // (numVertices, isDigraph, isWeighted)
 	Graph* g01_copy = GraphCopy(g01);
 	GraphAddWeightedEdge(g01, 1, 2,0);
 	GraphAddWeightedEdge(g01, 1, 4,0);

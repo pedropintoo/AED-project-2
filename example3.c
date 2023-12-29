@@ -46,7 +46,7 @@ void doSortsGraphFile(char *fname) {
     perror("fopen");
     exit(2);
   }
-
+  
   Graph* originalG = GraphFromFile(f);
   
   fclose(f);
@@ -54,7 +54,7 @@ void doSortsGraphFile(char *fname) {
   assert(GraphIsDigraph(originalG));
 
   // Uncomment for debugging
-  // GraphDisplay(originalG);
+  GraphDisplay(originalG);
 
   // TOPOLOGICAL SORTING
 

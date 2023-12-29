@@ -6,6 +6,8 @@
 // Graph EXAMPLE
 //
 
+#include <stdlib.h>
+
 #include "Graph.h"
 
 int main(void) {
@@ -40,6 +42,7 @@ int main(void) {
   }
 
   GraphDestroy(&g02);
+  fclose(f);
 
 	return 0;
 }

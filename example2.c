@@ -36,7 +36,7 @@ int main(void) {
   GraphTopoSortDisplaySequence(result01);
 
   GraphTopoSortDestroy(&result01);
-  return;
+  
   printf(" *** 2nd Algorithm ***\n");
 
   GraphTopoSort* result02 = GraphTopoSortComputeV2(g01);
@@ -44,7 +44,7 @@ int main(void) {
   GraphTopoSortDisplaySequence(result02);
 
   GraphTopoSortDestroy(&result02);
-
+  
   printf(" *** 3rd Algorithm ***\n");
 
   GraphTopoSort* result03 = GraphTopoSortComputeV3(g01);

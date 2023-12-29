@@ -217,19 +217,20 @@ Graph* GraphFromFile(FILE* f) {
   fscanf(f,"%d",&isWeighted);
   int numVertices;
   fscanf(f,"%d",&numVertices);
-  int numEdges;
-  fscanf(f,"%d",&numEdges);
+  int lines;
+  fscanf(f,"%d",&lines);
   
   Graph* g = GraphCreate(numVertices,isDigraph,isWeighted);
   
   int vertex, adjVertex;
   double weight;
-  for (int i = 0; i < numEdges; i++) {
+  for (int i = 0; i < lines; i++) {
     fscanf(f,"%d %d",&vertex,&adjVertex);
-     
     if (isWeighted) {
       fscanf(f,"%lf",&weight); // must execute even if they are a self-loop
-      if (vertex != adjVertex) GraphAddWeightedEdge(g,vertex,adjVertex,weight); 
+      if (vertex != adjVertex) {
+        GraphAddWeightedEdge(g,vertex,adjVertex,weight); 
+      }
     } else {
       if (vertex != adjVertex) GraphAddEdge(g,vertex,adjVertex);
     }
@@ -455,7 +456,6 @@ int GraphAddWeightedEdge(Graph* g, unsigned int v, unsigned int w,
   return _addEdge(g, v, w, weight);
 }
 
-// What's supposed to return?
 int GraphRemoveEdge(Graph* g, unsigned int v, unsigned int w) {
   assert(g != NULL);
 
@@ -485,6 +485,8 @@ int GraphRemoveEdge(Graph* g, unsigned int v, unsigned int w) {
       g->numEdges--;
       vertex->outDegree--;
 
+      free(edge);
+
       // In a directed graph, only remove the edge in one direction
       if (g->isDigraph) {
         ListMove(g->verticesList, w);
@@ -505,10 +507,15 @@ int GraphRemoveEdge(Graph* g, unsigned int v, unsigned int w) {
           if (inverseEdge->adjVertex == v) {
             ListRemoveCurrent(edgeList);
             vertex->outDegree--;
+
+            free(inverseEdge);
             break;
           }
         }
       }
+
+      // Now it's impossible to have a complete graph
+      g->isComplete = 0;
 
       return 1; // Edge removed successfully
     }

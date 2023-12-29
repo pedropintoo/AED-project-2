@@ -156,32 +156,12 @@ void GraphDestroy(Graph** p) {
 
 Graph* GraphCopy(const Graph* g) {
   assert(g != NULL);
-
+  
   // TO BE COMPLETED !!
-  Graph* g_new = (Graph*)malloc(sizeof(struct _GraphHeader)); // can't use GraphCreate/GraphCreateComplete, because we can have Complete Graph weighted
-  if (g_new == NULL) abort();
-
-  g_new->isDigraph = g->isDigraph;
+  
+  Graph* g_new = GraphCreate(g->numVertices, g->isDigraph, g->isWeighted);
   g_new->isComplete = g->isComplete;
-  g_new->isWeighted = g->isWeighted;
 
-  g_new->numVertices = g->numVertices;
-  // g_new->numEdges = g->numEdges; // _addEdge increments it !!!
-  
-  g_new->verticesList = ListCreate(graphVerticesComparator);
-  
-  for (unsigned int i = 0; i < g->numVertices; i++) {
-    ListMove(g->verticesList,i);
-    struct _Vertex* v_new = (struct _Vertex*)malloc(sizeof(struct _Vertex));
-    struct _Vertex* v = ListGetCurrentItem(g->verticesList);
-    
-    v_new->id = v->id; // only this because _addEdge, increments the other vars
-    
-    v_new->edgesList = ListCreate(graphEdgesComparator); // allocate memory!
-
-    ListInsert(g_new->verticesList,v_new); // add the copy to the list
-  }
-  
   // Add adjacent vertices
   // Only after, because the _addEdge needs all vertex in verticesList!
   for (unsigned int i = 0; i < g->numVertices; i++) {
@@ -190,8 +170,8 @@ Graph* GraphCopy(const Graph* g) {
     List* edgesList = v->edgesList;
 
     // v->outDegree -> number of adjacent vertices
-    for (unsigned int i = 0; i < v->outDegree; i++) {
-      ListMove(edgesList,i);
+    for (unsigned int j = 0; j < v->outDegree; j++) {
+      ListMove(edgesList,j);
       struct _Edge* e = ListGetCurrentItem(edgesList);
 
       if (g->isWeighted) {

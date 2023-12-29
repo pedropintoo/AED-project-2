@@ -147,6 +147,9 @@ GraphTopoSort* GraphTopoSortComputeV2(Graph* g) {
         topoSort->marked[v] = 1;  // Mark the vertex as visited
         selected = 1;  // Set the flag to indicate a vertex is selected
 
+        // GraphGetAdjacentsTo not handle empty situations!
+        if(GraphGetVertexOutDegree(g,v) == 0) break; // other selected vertex
+
         // Decrease incoming edges from the adjacent vertices of selected vertex
         unsigned int* adjacentsTo = GraphGetAdjacentsTo(g, v); // allocate memory !!
         for (unsigned int i = 1; i <= adjacentsTo[0]; i++) {
@@ -156,7 +159,6 @@ GraphTopoSort* GraphTopoSortComputeV2(Graph* g) {
           topoSort->numIncomingEdges[w]--;
         }
         free(adjacentsTo);
-
         break; // other selected vertex
       }
     }
@@ -209,6 +211,9 @@ GraphTopoSort* GraphTopoSortComputeV3(Graph* g) {
 
     // Save the vertex in the sequence
     topoSort->vertexSequence[s] = v;
+
+    // GraphGetAdjacentsTo not handle empty situations!
+    if(GraphGetVertexOutDegree(g,v) == 0) continue; 
 
     // Decrease incoming edges from the adjacent vertices of selected vertex
     unsigned int* adjacentsTo = GraphGetAdjacentsTo(g, v); // allocate memory !!

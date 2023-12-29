@@ -48,13 +48,13 @@ void doSortsGraphFile(char *fname) {
   }
   
   Graph* originalG = GraphFromFile(f);
-  
+
   fclose(f);
   
   assert(GraphIsDigraph(originalG));
 
   // Uncomment for debugging
-  GraphDisplay(originalG);
+  // GraphDisplay(originalG);
 
   // TOPOLOGICAL SORTING
 
@@ -64,7 +64,7 @@ void doSortsGraphFile(char *fname) {
 
     // Make a copy of the original graph
     Graph *g = GraphCopy(originalG);
-  
+       
     printf("FILE: %s\n", fname);
     printf("SORT: %s\n", sortName);
     

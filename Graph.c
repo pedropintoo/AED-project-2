@@ -527,7 +527,8 @@ int GraphCheckInvariants(const Graph* g) {
   // 2) Consistency in the in-degree and out-degree
   // For each vertex in the graph, the in-degree should be equal to the number of edges arriving at it, and the out-degree should be equal to the number of edges departing from it.
   unsigned int inDegree;
-  unsigned int sum = 0; // 3) Correct counting of edges
+  unsigned int sumOutDegrees = 0; // 3) Correct counting of edges
+  unsigned int sumInDegrees = 0;
   for (unsigned int i = 0; i < g->numVertices; i++) {
     ListMove(verticesList,i);
     inDegree = 0;
@@ -535,7 +536,7 @@ int GraphCheckInvariants(const Graph* g) {
     
     if(ListGetSize(v->edgesList) != v->outDegree) return 0; // Check the out-degree
 
-    sum = sum + v->outDegree; // 3)
+    sumOutDegrees = sumOutDegrees + v->outDegree; // 3)
 
     // Check the in-degree
     if(g->isDigraph) {
@@ -556,18 +557,22 @@ int GraphCheckInvariants(const Graph* g) {
         }
       }
       if(inDegree != v->inDegree) return 0; // Check the in-degree
+      sumInDegrees = sumInDegrees + v->inDegree;
     }
+
     
     
   }
 
+  
   // 3) Correct counting of edges
   // i) If it is a directed graph (digraph) -> equal to the sum of the out-degrees of the vertices
   // ii) If it is not a directed graph -> equal to the sum of the out-degrees of the vertices divided by 2
   if(g->isDigraph) {
-    if(g->numEdges != sum) return 0;
+    if(sumOutDegrees != sumInDegrees) return 0; // In a directed graph (digraph), the sum of outDegrees must be equal to the sum of inDegrees, and they must both equal the number of edges (see below).
+    if(g->numEdges != sumOutDegrees) return 0;
   } else {
-    if(g->numEdges != sum/2) return 0;
+    if(g->numEdges != sumOutDegrees/2) return 0;
   }
 
   // 4) If it is not a directed graph -> the sum of degrees is equal to twice the number of edges

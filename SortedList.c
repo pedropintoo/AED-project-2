@@ -155,6 +155,7 @@ int ListMove(List* l, int newPos) {
       l->current = l->current->next;
     }
   }
+  
   l->currentPos = newPos;
 
   return 0;  // success

@@ -90,7 +90,7 @@ GraphTopoSort* GraphTopoSortComputeV1(Graph* g) {
 
         // Remove outgoing edges from the selected vertex
         unsigned int* adjacentsTo = GraphGetAdjacentsTo(g_copy, v); // allocate memory !!
-        for (unsigned int i = 1; i <= adjacentsTo[0]; i++) {
+        for (unsigned int i = 1; i <= adjacentsTo[0]; i++) { // element 0, stores the number of adjacent vertices
           GraphRemoveEdge(g_copy, v, adjacentsTo[i]);
         }
         free(adjacentsTo);

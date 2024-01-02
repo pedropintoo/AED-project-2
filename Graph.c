@@ -442,8 +442,9 @@ int GraphRemoveEdge(Graph* g, unsigned int v, unsigned int w) {
   assert(g != NULL);
 
   // TO BE COMPLETED !!
-  assert(v < ListGetSize(g->verticesList) && w < ListGetSize(g->verticesList));
   assert(GraphCheckInvariants(g)); // TESTAR
+  assert(v < g->numVertices && w < g->numVertices);
+  
 
   // Move to the initial vertex
   ListMove(g->verticesList, v);
@@ -498,7 +499,7 @@ int GraphRemoveEdge(Graph* g, unsigned int v, unsigned int w) {
 
       // Now it's impossible to have a complete graph
       g->isComplete = 0;
-
+      assert(GraphCheckInvariants(g)); // TESTAR
       return 1; // Edge removed successfully
     }
   }
@@ -512,75 +513,68 @@ int GraphCheckInvariants(const Graph* g) {
   assert(g != NULL);
 
   // TO BE COMPLETED !!
-  unsigned int E = g->numEdges;
-  unsigned int V = g->numVertices;
+  
   List* verticesList = g->verticesList;
-
 
   // ....
 
-  // 0) Um grafo com V vértices tem no máximo V(V-1)/2 arestas
-  assert( g->numEdges <= g->numVertices*(g->numVertices-1)/2 );
+  // 0) A graph with V vertices has at most V(V-1)/2 edges.
+  if( g->numEdges > g->numVertices*(g->numVertices-1)/2 ) return 0;
 
-  // 1) Número correto de vértices na lista
-  assert(g->numVertices == ListGetSize(verticesList));
+  // 1) Correct number of vertices in the list.
+  if(g->numVertices != ListGetSize(verticesList)) return 0;
 
-  // 2) Contagem correta de arestas
-  // i) Se for digrafo -> igual à soma dos graus de saída dos vértices
-  // ii) Se não for digrafo -> -> igual à soma dos graus de saída dos vértices/2
-  int sum = 0;
-  ListMoveToHead(verticesList);
-  for (unsigned int i = 0; i < g->numVertices; ListMoveToNext(verticesList), i++) {
+  // 2) Consistency in the in-degree and out-degree
+  // For each vertex in the graph, the in-degree should be equal to the number of edges arriving at it, and the out-degree should be equal to the number of edges departing from it.
+  unsigned int inDegree;
+  unsigned int sum = 0; // 3) Correct counting of edges
+  for (unsigned int i = 0; i < g->numVertices; i++) {
+    ListMove(verticesList,i);
+    inDegree = 0;
     struct _Vertex* v = ListGetCurrentItem(verticesList);
-    sum = sum + v->outDegree;
-  }    
+    
+    if(ListGetSize(v->edgesList) != v->outDegree) return 0; // Check the out-degree
 
-  if(g->isDigraph) {
-    assert(g->numEdges == sum);
-  } else {
-    assert(g->numEdges == sum/2);
+    sum = sum + v->outDegree; // 3)
+
+    // Check the in-degree
+    if(g->isDigraph) {
+      for (unsigned int j = 0; j < g->numVertices; j++) {
+        ListMove(verticesList,j);
+        
+
+        if(i == j) continue;
+        struct _Vertex* v2 = ListGetCurrentItem(verticesList);
+
+        ListMoveToHead(v2->edgesList);
+        for (unsigned int e = 0; e < ListGetSize(v2->edgesList); ListMoveToNext(v2->edgesList), e++) {
+          struct _Edge* edge = ListGetCurrentItem(v2->edgesList);
+
+          if (edge->adjVertex == v->id) {
+            inDegree++;
+          }
+        }
+      }
+      if(inDegree != v->inDegree) return 0; // Check the in-degree
+    }
+    
+    
   }
 
-  // 3) Consistência nos graus de entrada e saída
-  // Para cada vértice no grafo, o grau de saída deve ser igual ao número de arestas que partem dele.
-  ListMoveToHead(verticesList);
-  for (unsigned int i = 0; i < g->numVertices; ListMoveToNext(verticesList), i++) {
-    struct _Vertex* v = ListGetCurrentItem(verticesList);
-
-    unsigned int numOUT = 0;
-    
-    // Verifica o grau de saída para cada aresta do vértice
-    ListMoveToHead(v->edgesList);
-    for (unsigned int j = 0; j < ListGetSize(v->edgesList); ListMoveToNext(v->edgesList), j++) {
-      struct _Edge* edge = ListGetCurrentItem(v->edgesList);
-
-      // Se a aresta chegar ao vértice, incrementa o contador de entrada
-      if (edge->adjVertex != i) {
-        numOUT++;
-      }
-    }  
-
-    // Verifica se os contadores coincidem com os graus de entrada e saída do vértice
-    assert(numOUT == v->outDegree);
-  }  
-
-  // 4) Se for digrafo ->  verificar se a soma dos graus de entrada de todos os vértices é igual à soma dos graus de saída
-  // 5) Se não for digrafo ->  soma dos graus é igual a 2 vezes o número de arestas
-  // 6) Se não for digrafo -> o número de vértices com grau ímpar é par
-  int sumDegrees = 0;
-  int numVertices = 0;
+  // 3) Correct counting of edges
+  // i) If it is a directed graph (digraph) -> equal to the sum of the out-degrees of the vertices
+  // ii) If it is not a directed graph -> equal to the sum of the out-degrees of the vertices divided by 2
   if(g->isDigraph) {
-    int sumIN = 0;
-    int sumOUT = 0;
-    ListMoveToHead(verticesList);
-    for (unsigned int i = 0; i < g->numVertices; ListMoveToNext(verticesList), i++) {
-      struct _Vertex* v = ListGetCurrentItem(verticesList);
-      sumIN = sumIN + v->inDegree;
-      sumOUT = sumOUT + v->inDegree;
-    }    
-    assert(sumIN == sumOUT);
-    
-  } else { // Se não for digrafo
+    if(g->numEdges != sum) return 0;
+  } else {
+    if(g->numEdges != sum/2) return 0;
+  }
+
+  // 4) If it is not a directed graph -> the sum of degrees is equal to twice the number of edges
+  // 5) If it is not a directed graph -> the number of vertices with odd degree is even
+  unsigned int sumDegrees = 0;
+  unsigned int numVertices = 0;
+  if(!g->isDigraph) {
     ListMoveToHead(verticesList);
     for (unsigned int i = 0; i < g->numVertices; ListMoveToNext(verticesList), i++) {
       struct _Vertex* v = ListGetCurrentItem(verticesList);
@@ -590,21 +584,20 @@ int GraphCheckInvariants(const Graph* g) {
         numVertices++;
       }
     }    
-    assert(sumDegrees == 2 * g->numEdges);
-    assert(numVertices % 2 == 0);
+    if(sumDegrees != 2 * g->numEdges) return 0;
+    if(numVertices % 2 != 0) return 0;
   }
 
 
-  // 7) Se o grafo é completo -> verificar numEdges e numVertices
-
+  // 6) If the graph is complete -> check numEdges and numVertices
 
   if(g->isComplete) {
 
     if (g->isDigraph) {
-      assert( g->numEdges == g->numVertices * (g->numVertices - 1) );
+      if( g->numEdges != g->numVertices * (g->numVertices - 1) ) return 0;
     } 
     else {
-      assert( g->numEdges == g->numVertices * (g->numVertices - 1) / 2 );
+      if( g->numEdges != g->numVertices * (g->numVertices - 1) / 2 ) return 0;
     }
 
     ListMoveToHead(verticesList);
@@ -612,18 +605,14 @@ int GraphCheckInvariants(const Graph* g) {
       struct _Vertex* v = ListGetCurrentItem(verticesList);
 
       if (g->isDigraph) {
-        assert( v->inDegree == g->numVertices - 1 );
-        assert( v->outDegree == g->numVertices - 1 );
+        if( v->inDegree != g->numVertices - 1 ) return 0;
+        if( v->outDegree != g->numVertices - 1 ) return 0;
       } 
       else {
-        assert( v->outDegree == g->numVertices - 1 );
+        if( v->outDegree != g->numVertices - 1 ) return 0;
       }
     }    
   }
-
-
-  // 8) Existência de listas de vértices
-  // assert(ListIsEmpty(verticesList) != 1);
 
   return 1;
 }

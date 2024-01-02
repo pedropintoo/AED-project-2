@@ -46,6 +46,10 @@ int main(void) {
   GraphRemoveEdge(g03,1,2); // missing!
   GraphDisplay(g03);
 
+  GraphCheckInvariants(g01);
+  GraphCheckInvariants(dig01);
+  GraphCheckInvariants(g03);
+
   GraphDestroy(&g01);
   GraphDestroy(&dig01);
   GraphDestroy(&g03);

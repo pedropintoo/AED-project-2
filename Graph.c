@@ -212,9 +212,7 @@ Graph* GraphFromFile(FILE* f) {
     fscanf(f,"%d %d",&vertex,&adjVertex);
     if (isWeighted) {
       fscanf(f,"%lf",&weight); // must execute even if they are a self-loop
-      if (vertex != adjVertex) {
-        GraphAddWeightedEdge(g,vertex,adjVertex,weight); 
-      }
+      if (vertex != adjVertex) GraphAddWeightedEdge(g,vertex,adjVertex,weight); 
     } else {
       if (vertex != adjVertex) GraphAddEdge(g,vertex,adjVertex);
     }

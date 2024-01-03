@@ -29,7 +29,7 @@ int main(void) {
 
   // GraphGraphFromFile
   printf("\n\n");
-  FILE* f = fopen("GRAPHS/SWtinyEWD.txt","r");
+  FILE* f = fopen("GRAPHS/SWmediumDG.txt","r");
   Graph* g02 = GraphFromFile(f);
   GraphDisplay(g02);
 

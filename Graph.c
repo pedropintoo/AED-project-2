@@ -517,8 +517,6 @@ int GraphCheckInvariants(const Graph* g) {
   
   List* verticesList = g->verticesList;
 
-  // ....
-
   // 0) A graph with V vertices has at most V(V-1)/2 edges.
   if( g->numEdges > g->numVertices*(g->numVertices-1)/2 ) return 0;
 
@@ -539,11 +537,10 @@ int GraphCheckInvariants(const Graph* g) {
 
     sumOutDegrees = sumOutDegrees + v->outDegree; // 3)
 
-    // Check the in-degree
+    // Check the in-degree if digraph
     if(g->isDigraph) {
       for (unsigned int j = 0; j < g->numVertices; j++) {
         ListMove(verticesList,j);
-        
 
         if(i == j) continue;
         struct _Vertex* v2 = ListGetCurrentItem(verticesList);
@@ -559,10 +556,7 @@ int GraphCheckInvariants(const Graph* g) {
       }
       if(inDegree != v->inDegree) return 0; // Check the in-degree
       sumInDegrees = sumInDegrees + v->inDegree;
-    }
-
-    
-    
+    }  
   }
 
   
@@ -576,26 +570,22 @@ int GraphCheckInvariants(const Graph* g) {
     if(g->numEdges != sumOutDegrees/2) return 0;
   }
 
-  // 4) If it is not a directed graph -> the sum of degrees is equal to twice the number of edges
-  // 5) If it is not a directed graph -> the number of vertices with odd degree is even
-  unsigned int sumDegrees = 0;
-  unsigned int numVertices = 0;
+  // 4) If it is not a directed graph -> the number of vertices with odd degree is even
+  unsigned int numVerticesWithOddDegree = 0;
   if(!g->isDigraph) {
     ListMoveToHead(verticesList);
     for (unsigned int i = 0; i < g->numVertices; ListMoveToNext(verticesList), i++) {
       struct _Vertex* v = ListGetCurrentItem(verticesList);
-      sumDegrees = sumDegrees + v->outDegree; // Para grafos não direcionados, inDegree == outDegree
 
       if(v->outDegree % 2 != 0) {
-        numVertices++;
+        numVerticesWithOddDegree++;
       }
     }    
-    if(sumDegrees != 2 * g->numEdges) return 0;
-    if(numVertices % 2 != 0) return 0;
+    if(numVerticesWithOddDegree % 2 != 0) return 0;
   }
 
 
-  // 6) If the graph is complete -> check numEdges and numVertices
+  // 5) If the graph is complete -> check numEdges and numVertices
 
   if(g->isComplete) {
 

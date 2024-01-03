@@ -82,6 +82,7 @@ GraphTopoSort* GraphTopoSortComputeV1(Graph* g) {
 
     // Iterate through vertices to find those with in-degree 0 and that is not marked
     for (unsigned int v = 0; v < numVertices; v++) {
+      COMPARISONS++;
       if (!topoSort->marked[v] && GraphGetVertexInDegree(g_copy, v) == 0) {
         // Save the vertex in the sequence
         topoSort->vertexSequence[s++] = v;
@@ -92,6 +93,7 @@ GraphTopoSort* GraphTopoSortComputeV1(Graph* g) {
         unsigned int* adjacentsTo = GraphGetAdjacentsTo(g_copy, v); // allocate memory !!
         for (unsigned int i = 1; i <= adjacentsTo[0]; i++) { // element 0, stores the number of adjacent vertices
           GraphRemoveEdge(g_copy, v, adjacentsTo[i]);
+          OPERATIONS++;
         }
         free(adjacentsTo);
 
@@ -141,6 +143,7 @@ GraphTopoSort* GraphTopoSortComputeV2(Graph* g) {
 
     // Iterate through vertices to find those with in-degree 0 and that is not marked
     for (unsigned int v = 0; v < numVertices; v++) {
+      COMPARISONS++;
       if (!topoSort->marked[v] && topoSort->numIncomingEdges[v] == 0) {
         // Save the vertex in the sequence
         topoSort->vertexSequence[s++] = v;
@@ -157,6 +160,7 @@ GraphTopoSort* GraphTopoSortComputeV2(Graph* g) {
           unsigned int w = adjacentsTo[i];
 
           topoSort->numIncomingEdges[w]--;
+          OPERATIONS++;
         }
         free(adjacentsTo);
         break; // other selected vertex
@@ -205,7 +209,7 @@ GraphTopoSort* GraphTopoSortComputeV3(Graph* g) {
 
   // Iterate until all vertices are included in the topological sort
   for (s = 0; !QueueIsEmpty(queue); s++){
-
+    COMPARISONS++;
     // vertex with 0 incomingEdges
     unsigned int v = QueueDequeue(queue);
 
@@ -222,6 +226,7 @@ GraphTopoSort* GraphTopoSortComputeV3(Graph* g) {
       unsigned int w = adjacentsTo[i];
 
       if (--topoSort->numIncomingEdges[w] == 0) QueueEnqueue(queue,w);
+      OPERATIONS++;
     }
     free(adjacentsTo);
 

@@ -517,6 +517,7 @@ int GraphRemoveEdge(Graph* g, unsigned int v, unsigned int w) {
       // Now it's impossible to have a complete graph
       g->isComplete = 0;
       assert(GraphCheckInvariants(g)); // Check invariants
+
       return 1; // Edge removed successfully
     }
   }

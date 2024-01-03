@@ -39,7 +39,7 @@ static GraphTopoSort* _create(Graph* g) {
 
   // allocate memory for internal arrays
   p->marked = (int*)calloc(GraphGetNumVertices(g),sizeof(int));
-  p->numIncomingEdges = (unsigned int*)malloc(GraphGetNumEdges(g) * sizeof(unsigned int));
+  p->numIncomingEdges = (unsigned int*)malloc(GraphGetNumVertices(g) * sizeof(unsigned int));
   p->vertexSequence = (unsigned int*)malloc(GraphGetNumVertices(g) * sizeof(unsigned int));
 
   p->validResult = 0;
@@ -86,7 +86,7 @@ GraphTopoSort* GraphTopoSortComputeV1(Graph* g) {
       if (!topoSort->marked[v] && GraphGetVertexInDegree(g_copy, v) == 0) {
         // Save the vertex in the sequence
         topoSort->vertexSequence[s++] = v;
-        topoSort->marked[v] = 1;  // Mark the vertex as visited
+        topoSort->marked[v] = 1;  // Mark the vertex as visited (simulate the removed vertex)
         selected = 1;  // Set the flag to indicate a vertex is selected
 
         // Remove outgoing edges from the selected vertex
@@ -150,8 +150,8 @@ GraphTopoSort* GraphTopoSortComputeV2(Graph* g) {
         topoSort->marked[v] = 1;  // Mark the vertex as visited
         selected = 1;  // Set the flag to indicate a vertex is selected
 
-        // GraphGetAdjacentsTo not handle empty situations!
-        if(GraphGetVertexOutDegree(g,v) == 0) break; // other selected vertex
+        // GraphGetAdjacentsTo handle empty situations!
+        // if(GraphGetVertexOutDegree(g,v) == 0) break; // other selected vertex
 
         // Decrease incoming edges from the adjacent vertices of selected vertex
         unsigned int* adjacentsTo = GraphGetAdjacentsTo(g, v); // allocate memory !!
@@ -216,8 +216,8 @@ GraphTopoSort* GraphTopoSortComputeV3(Graph* g) {
     // Save the vertex in the sequence
     topoSort->vertexSequence[s] = v;
 
-    // GraphGetAdjacentsTo not handle empty situations!
-    if(GraphGetVertexOutDegree(g,v) == 0) continue; 
+    // GraphGetAdjacentsTo handle empty situations!
+    // if(GraphGetVertexOutDegree(g,v) == 0) continue; 
 
     // Decrease incoming edges from the adjacent vertices of selected vertex
     unsigned int* adjacentsTo = GraphGetAdjacentsTo(g, v); // allocate memory !!
@@ -269,7 +269,6 @@ unsigned int* GraphTopoSortGetSequence(const GraphTopoSort* p) {
   
   if (p->validResult == 0) return NULL;
 
-
   unsigned int numVertices = p->numVertices;
 
   // allocate memory for the new array
@@ -286,7 +285,7 @@ unsigned int* GraphTopoSortGetSequence(const GraphTopoSort* p) {
 // DISPLAYING on the console
 
 //
-// The toplogical sequence of vertex indices, if it could be computed
+// The topological sequence of vertex indices, if it could be computed
 //
 void GraphTopoSortDisplaySequence(const GraphTopoSort* p) {
   assert(p != NULL);
@@ -304,9 +303,9 @@ void GraphTopoSortDisplaySequence(const GraphTopoSort* p) {
 }
 
 //
-// The toplogical sequence of vertex indices, if it could be computed
-// Followed by the digraph displayed using the adjecency lists
-// Adjacency lists are presented in topologic sorted order
+// The topological sequence of vertex indices, if it could be computed
+// Followed by the digraph displayed using the adjacency lists
+// Adjacency lists are presented in topological sorted order
 //
 void GraphTopoSortDisplay(const GraphTopoSort* p) {
   assert(p != NULL);

@@ -19,8 +19,10 @@ example2: example2.o Graph.o GraphTopologicalSorting.o \
 example3: example3.o Graph.o GraphTopologicalSorting.o \
  IntegersQueue.o SortedList.o instrumentation.o
 
-example4: example4.o Graph.o SortedList.o
+example4: example4.o Graph.o SortedList.o GraphGenerator.o
 
+GraphTestTopo: GraphTestTopo.o Graph.o GraphTopologicalSorting.o \
+ IntegersQueue.o GraphGenerator.o SortedList.o
 
 # Include dependencies (generated with gcc -MMD)
 -include *.d

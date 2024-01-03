@@ -161,6 +161,8 @@ Graph* GraphCopy(const Graph* g) {
   
   // TO BE COMPLETED !!
   
+  assert(GraphCheckInvariants(g)); // Check invariants
+
   Graph* g_new = GraphCreate(g->numVertices, g->isDigraph, g->isWeighted);
   g_new->isComplete = g->isComplete;
 
@@ -184,8 +186,8 @@ Graph* GraphCopy(const Graph* g) {
     }
   }
 
-  assert(g_new->numVertices == ListGetSize(g_new->verticesList));
-  assert(GraphCheckInvariants(g)); // TESTAR
+  assert(GraphCheckInvariants(g_new)); // Check invariants of new graph
+
   return g_new;
 }
 
@@ -216,11 +218,10 @@ Graph* GraphFromFile(FILE* f) {
     } else {
       if (vertex != adjVertex) GraphAddEdge(g,vertex,adjVertex);
     }
-    
-    
   }
   
-  assert(GraphCheckInvariants(g)); // TESTAR
+  assert(GraphCheckInvariants(g)); // Check invariants
+
   return g;
 }
 
@@ -443,10 +444,9 @@ int GraphRemoveEdge(Graph* g, unsigned int v, unsigned int w) {
   assert(g != NULL);
 
   // TO BE COMPLETED !!
-  assert(GraphCheckInvariants(g)); // TESTAR
-  assert(v < g->numVertices && w < g->numVertices);
+  assert(GraphCheckInvariants(g)); // Check invariants
+  assert(v < g->numVertices && w < g->numVertices); // Check if vertices \in numVertices
   
-
   // Move to the initial vertex
   ListMove(g->verticesList, v);
   struct _Vertex* vertex = ListGetCurrentItem(g->verticesList);
@@ -500,7 +500,7 @@ int GraphRemoveEdge(Graph* g, unsigned int v, unsigned int w) {
 
       // Now it's impossible to have a complete graph
       g->isComplete = 0;
-      assert(GraphCheckInvariants(g)); // TESTAR
+      assert(GraphCheckInvariants(g)); // Check invariants
       return 1; // Edge removed successfully
     }
   }
@@ -586,7 +586,7 @@ int GraphCheckInvariants(const Graph* g) {
 
 
   // 5) If the graph is complete -> check numEdges and numVertices
-
+  // Note: _addEdge don't change 'g->isComplete'
   if(g->isComplete) {
 
     if (g->isDigraph) {

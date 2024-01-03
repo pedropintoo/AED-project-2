@@ -15,7 +15,7 @@
 
 int main(void) {
 
-    Graph* g = GraphGenerateSuccessTopoOrder(8000,50000);
+    Graph* g = GraphGenerateSuccessTopoOrder(80,250);
 
     GraphDisplay(g);
     assert(GraphCheckInvariants(g));

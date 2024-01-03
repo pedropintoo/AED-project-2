@@ -37,4 +37,4 @@ echo "}" >> "$output_file"
 
 echo "Transformação concluída. O arquivo DOT foi salvo em $output_file."
 
-dot -Tpng -o grafo.png teste.dot
+dot -Tpng -o "${input_file%.*}.png" $output_file

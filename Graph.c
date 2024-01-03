@@ -185,7 +185,7 @@ Graph* GraphCopy(const Graph* g) {
   }
 
   assert(g_new->numVertices == ListGetSize(g_new->verticesList));
-
+  assert(GraphCheckInvariants(g)); // TESTAR
   return g_new;
 }
 
@@ -220,6 +220,7 @@ Graph* GraphFromFile(FILE* f) {
     
   }
   
+  assert(GraphCheckInvariants(g)); // TESTAR
   return g;
 }
 

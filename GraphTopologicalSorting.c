@@ -209,7 +209,7 @@ GraphTopoSort* GraphTopoSortComputeV3(Graph* g) {
 
   // Iterate until all vertices are included in the topological sort
   for (s = 0; !QueueIsEmpty(queue); s++){
-    COMPARISONS++;
+    REMOVALS++;
     // vertex with 0 incomingEdges
     unsigned int v = QueueDequeue(queue);
 

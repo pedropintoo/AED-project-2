@@ -1,4 +1,4 @@
-Ficheiro que tem os 3 algoritmos desenvolvidos queremos analisar: GraphTopologicalSorting.c
+Ficheiro que tem os 3 algoritmos desenvolvidos que queremos analisar: GraphTopologicalSorting.c
 Queremos analisar a complexidade dos 3 algoritmos desenvolvidos.
 Queremos analisar 4 casos: Sucesso: 1) Melhor Caso , 2) Pior Caso ; Insucesso: 3) Melhor Caso, 4) Pior Caso
 Para isso tivemos que criar um ficheiro responsável por gerar grafos para analisarmos os algoritmos: GraphGenerator.c

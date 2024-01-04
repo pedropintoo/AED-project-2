@@ -14,8 +14,6 @@
 #include "GraphTopologicalSorting.h"
 #include "instrumentation.h"
 
-#define NUM_VERTICES_MAX 1000
-#define NUM_EDGES_MAX 1000
 #define VERSIONS 3          // Number of different versions of topological sort algorithm
 
 typedef GraphTopoSort* (*TopoSortFcn)(Graph*);
@@ -39,7 +37,7 @@ int main(int argc, char* argv[]) {
   assert(argc == 4);
 
   TopoInit();
-    
+  
   for (int numVertices = atoi(argv[1]); numVertices <= atoi(argv[3]); numVertices+= atoi(argv[2])) {
   
     Graph* originalG = GraphGenerateTopoInsuccessBest(numVertices);

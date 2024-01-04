@@ -21,10 +21,10 @@ Graph *GraphGenerateTopoSuccess(unsigned int numVertices, unsigned int numEdges)
     Graph* g = GraphCreate(numVertices, 1, 0);
     srand(time(NULL));
 
-    GraphAddEdge(g,0,1);
+    GraphAddEdge(g,0,1); 
 
     while (GraphGetNumEdges(g) != numEdges) {
-        for (unsigned int v = 0; v < numVertices - 1; v++) { // last vertex don't have adjacents
+        for (unsigned int v = 2; v < numVertices - 1; v++) { // last vertex don't have adjacents
 
             unsigned int numAddEdge = rand() % 2;
 

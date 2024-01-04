@@ -14,9 +14,15 @@
 
 int main(void) {
   
-  Graph* originalG = GraphGenerateTopoInsuccessWorst(10,15);
+  Graph* originalG = GraphGenerateTopoInsuccessWorst(10,12);
 
   GraphDisplay(originalG);
+
+  GraphTopoSort* topoSort = GraphTopoSortComputeV3(originalG);
+
+  GraphTopoSortDisplaySequence(topoSort);
+
+  GraphTopoSortDestroy(&topoSort);
   GraphDestroy(&originalG);
   // GraphCopy
 	// Graph* g01 = GraphCreate(6, 1, 1); // (numVertices, isDigraph, isWeighted)

@@ -88,7 +88,6 @@ GraphTopoSort* GraphTopoSortComputeV1(Graph* g) {
   unsigned int numVertices = topoSort->numVertices;
   
   Graph* g_copy = GraphCopy(g);
-
   // index of sequence
   unsigned int s = 0; 
 

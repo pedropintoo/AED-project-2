@@ -14,8 +14,6 @@
 #include "GraphTopologicalSorting.h"
 #include "instrumentation.h"
 
-#define NUM_VERTICES_MAX 1000
-#define NUM_EDGES_MAX 1000
 #define VERSIONS 3          // Number of different versions of topological sort algorithm
 
 typedef GraphTopoSort* (*TopoSortFcn)(Graph*);

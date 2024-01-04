@@ -1,0 +1,80 @@
+Ficheiro que tem os 3 algoritmos desenvolvidos queremos analisar: GraphTopologicalSorting.c
+Queremos analisar a complexidade dos 3 algoritmos desenvolvidos.
+Queremos analisar 4 casos: Sucesso: 1) Melhor Caso , 2) Pior Caso ; Insucesso: 3) Melhor Caso, 4) Pior Caso
+Para isso tivemos que criar um ficheiro responsável por gerar grafos para analisarmos os algoritmos: GraphGenerator.c
+Este ficheiro é constituído por três funções:
+    - i) GraphGenerateSuccessTopoOrder(numVertices, numEdges):
+    Essa função GraphGenerateSuccessTopoOrder gera um grafo direcionado acíclico (DAG) com o objetivo de analisar casos de sucesso, 
+    sendo tanto o melhor caso quanto o pior caso iguais. Neste contexto, o melhor e o pior caso referem-se ao mesmo cenário, pois todos os vértices precisam ser percorridos no grafo.
+
+    Vamos explicar as características principais do grafo gerado por esta função:
+        - O número total de vértices no grafo é especificado pelo parâmetro numVertices. O número total de arestas no grafo é especificado pelo parâmetro numEdges
+        - Antes de começar a gerar o grafo, a função realiza alguns asserts, por exemplo:
+            - assert(numEdges <= numVertices*(numVertices-1)/2) : Garante que o número de arestas (numEdges) não ultrapasse o máximo possível em um grafo completo não direcionado com numVertices vértices.
+        - Inicializa um grafo direcionado acíclico (DAG) usando a função GraphCreate com numVertices vértices.
+        - Adiciona uma aresta entre os vértices 0 e 1 inicialmente.
+        - Em seguida, um loop é executado até que o número de arestas no grafo atinja o valor desejado (numEdges).
+          Dentro desse loop, itera sobre todos os vértices (exceto o último, pois o último vértice não tem adjacentes).
+          Para cada vértice, decide aleatoriamente se adicionará 0 ou 1 aresta a partir desse vértice.
+          Se as condições permitirem (número total de arestas não ultrapassou numEdges e o grau de saída do vértice mais o número de arestas a serem adicionadas não ultrapassam o número total de vértices), então adiciona as arestas aleatórias necessárias.
+        - Retorna o grafo gerado.
+    - ii) GraphGenerateComplete(numVertices)
+    - iii) GraphGenerateInsuccessTopoOrderWithCycle(numVertices, numEdges)
+
+Criámos também 4 ficheiros que chamam as diferentes funções de GraphGenerator.c consoante o caso estudado:
+    - i) GraphTestTopoSuccess.c
+    - ii) (???)
+    - iii) GraphTestTopoInsuccessBest.c
+    - iv) GraphTestTopoInsuccessWorst.c (???) -> Não falta isto: unsigned int NUM_EDGES = atoi(argv[5]); ? Porque tem apenas "// Vertices change" e não tem "// Edges change" ? 
+
+    Estas funções recebem 5 argumentos: 
+    - 1) argv[1] = OPTION (ByEdge ou ByVertex) 
+    - 2) argv[2] = número inicial de "edges" ou "vertices" consoante a OPTION anterior 
+    - 3) argv[3] = incremento dessa variável ("edges" ou "vertices" consoante a OPTION anterior)
+    - 4) argv[4] = valor final dessa variável ("edges" ou "vertices" consoante a OPTION anterior )
+    - 5) argv[5] = unsigned int NUM_EDGES ou unsigned int NUM_VERTICES (valor fixo da outra varíavel que não estamos a variar)
+
+Folder onde guardamos os gráficos dos testes realizados: testTopo
+    - testTopo/byEdge -> Gráficos onde o número de "edges" varia. Nestes casos o número de vértices é mantido constante.
+    - testTopo/byVertex -> Gráficos onde o número de "vertices" varia. Nestes casos o número de edges é mantido constante.
+    - Dentro do Folder byEdge e byVertex guardamos os gráficos nos folders: iterations/operations/time
+    
+    - execute_topoTests.sh -> Executa o GraphTestTopo(...(???)) respetivo e envia o output para o ficheiro de texto: data_topoTests.txt. 
+    A formatação deste output foi definida em "instrumentation.c" na função InstrPrintTest() (???)
+    - main.m -> Ficheiro matlab que executa o ficheiro "execute_topoTests.sh" e lê do ficheiro "data_topoTests.txt" as variáveis nStudyArray, timeArray, caltimeArray, ITERATIONSArray e OPERATIONSArray.
+    - A variável nStudyArray pode ser nVertices ou nEdges pois uma delas vai variando consoante o incremnto definido. A outra é mantida constante durante toda a simulação.
+
+    Como traçamos os gráficos? Explicação do ficheiro main.m:
+    - Variável OPTION permite escolher se queremos ByEdge ou ByVertex
+    - Vão ser passados como argumentos em "execute_topoTests.sh" : edge_min, edge_inc, edge_max, vertex_min, vertex_inc, vertex_max
+    - Temos 3 algoritmos distintos. Para distinguirmos os 3 nos gráficos utilizámos 3 cores distintas: colorV1, colorV2 e colorV3
+    - OPTION == 0 -> ByEdge ; OPTION == 1 -> ByVertex : No código podemos observar que os argumentos passados em "execute_topoTests.sh" variam consoante a OPTION. 
+    Na OPTION == 0 como o número de vértices do grafo é constante a legenda dos gráficos indica o número de vértices do grafo.
+    Na OPTION == 0 como o número de arestas do grafo varia entre edges_min e edges_max, customLabelx = "Numero de arestas do Grafo"; e customTitle = "Variaçao do numero de arestas";.
+    Na OPTION == 0 -> ByEdge definiu-se a variável path = "byEdge" para os gráficos que serão traçados terem no início do nome "byEdge" para depois distinguirmos facilmente dos gráficos "byVertex"
+    Fez-se de forma semelhante para a OPTION == 1 -> ByVertex
+    - Depois lemos os dados que estão no ficheiro "data_topoTests.txt" para as variáveis nStudyArray, timeArray, caltimeArray, ITERATIONSArray e OPERATIONSArray.
+    - Neste momento já somos capazes de traçar os gráficos desejados.
+    
+    - Numa primeira secção "%% Tempo de execucao em funcao de n" está representado no mesmo gráfico o tempo de execução para os 3 algoritmos para grafos de diferentes tamanhos. 
+    O tamanho do grafo n (o número de vértices ou de arestas consoante a OPTION escolhida) vai ser aumentando ao longo do tempo e os tempos de execução são medidos e comparados.
+    Quando o ficheiro GraphTestTopo... é executado ele imprime a output com uma determinada formatação. Para faciltar a leitura dos dados decidimos usar 3 linhas para cada tamanho n do nosso grafo. Ou seja,
+    os dados da primeira linha correspondem ao algoritmo 1, os da linha 2 ao algoritmo 2 e os da linha 3 ao algoritmo 3.
+    Os dados da linha seguinte já dizem respeito a um grafo diferente com um tamanho incrementado pela variável edge_inc ou vertex_inc consoante a OPTION escolhida no início.
+    Portanto para acedermos às varíaveis para traçarmos os gráficos fazemos, por exemplo, para o algoritmo 2:
+    plot(nStudyArray(2:3:end),timeArray(2:3:end),colorV2,'DisplayName',sprintf("Versao 2 - %s",customLegend));
+    - nStudyArray(2:3:end) ->  cria um vetor contendo elementos de nStudyArray começando do segundo elemento e indo até o final, com um passo de 3. Ou seja, são selecionados todos os elementos em posições 2, 5, 8, 11, etc
+    - timeArray(2:3:end) -> cria um vetor usando elementos de timeArray começando do segundo elemento, com um passo de 3. Novamente, são selecionados os elementos nas posições 2, 5, 8, 11, etc.
+    - colorV2 -> variável que especifica a cor do gráfico. Definida em cima para o algoritmo 2.
+    - 'DisplayName' -> Define o rótulo a ser exibido para essa curva no gráfico.
+    - sprintf("Versao 2 - %s",customLegend) -> rótulo formatado que inclui "Versao 2 - " seguido pelo conteúdo de customLegend definido em cima. 
+    - Em cima definimos a variável printAll == 1. Após a criação do gráfico com a função plot, o código configura algumas propriedades para a impressão do gráfico em um arquivo PDF e, em seguida, realiza a impressão.
+    As variáveis path, onlyV2path, edge_max e vertex_max são utilizadas para construir o nome do pdf.
+    (???) Onde é especificado o caminho onde esse pdf é guardado?
+
+    - Na segunda secção %% Numero de iteracoes em funcao de n está representado no mesmo gráfico o número de iterações para os 3 algoritmos para grafos de diferentes tamanhos.
+      Na terceira secção %% Numero de iteracoes em funcao de n está representado no mesmo gráfico o número de iterações para os 3 algoritmos para grafos de diferentes tamanhos.  
+    A lógica é a mesma da secção explicada anteriormente. Traçamos um gráfico utilizando as variáveis: variáveis nStudyArray, timeArray, caltimeArray, ITERATIONSArray e OPERATIONSArray.
+
+    - Acho que não iremos usar a terceira secção %% Numero de operacoes relevantes (OPERATIONS) em funcao de n, depende do que o Lavrador disser.
+    A lógica é a mesma das secções anteriores.

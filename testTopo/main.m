@@ -20,9 +20,9 @@ onlyV2 = 0; % 1-> Graficos com apenas a versao 2 (algoritmo melhorado)
 
 printAll = 1;
 
-colorV1 = "or-";
-colorV2 = "ob--";
-colorV3 = "o-";
+colorV1 = "or-"; % Red: "#A2142F"
+colorV2 = "ob--"; % Blue: "#0072BD"
+colorV3 = "o-"; % Green: "#77AC30"
 % Na OPTION == 0:
 % Para sobrepor ao grafico outro com window_max=2 (dx=dy), basta retirar "r" e "b" das
 % cores de cima e mudar os valores window_max e executar "Executar e ler dados"

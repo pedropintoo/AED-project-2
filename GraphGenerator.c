@@ -56,6 +56,6 @@ Graph *GraphGenerateTopoInsuccessWorst(unsigned int numVertices, unsigned int nu
     Graph* originalG = GraphGenerateTopoSuccess(numVertices,numEdges-1);
 
     GraphAddEdge(originalG,1,0); // add loop in 2 lowest id vertices 
-    GraphDisplay(originalG);
+
     return originalG;
 }

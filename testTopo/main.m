@@ -1,6 +1,6 @@
 %% Constantes a alterar.....
 
-CASE = 0;
+CASE = 1;
 % 0-> Sucesso - Melhor/Pior caso
 % 1-> Nao Sucesso - Pior caso
 % 2-> Nao Sucesso - Melhor caso
@@ -58,7 +58,30 @@ if (CASE == 0)
         customLabelx = "Numero de vertices do Grafo";
         customTitle = "Variaçao do numero de vertices";
     end
-end    
+elseif (CASE == 1)
+    if (OPTION == 0) 
+        status = system(sprintf("./execute_topoInsuccessWorst.sh %d %d %d %d %d %d",0,edge_min,edge_inc,edge_max,vertex_max)); 
+        customLegend = sprintf("V%d",vertex_max);
+        preName = "insuccessWorst_byEdge_";
+        path = "InsuccessWorst/byEdge";
+        customLabelx = "Numero de arestas do Grafo";
+        customTitle = "Variaçao do numero de arestas";
+    else
+        status = system(sprintf("./execute_topoInsuccessWorst.sh %d %d %d %d %d",1,vertex_min,vertex_inc,vertex_max,edge_max)); 
+        customLegend = sprintf("E%d",edge_max);
+        preName = "insuccessWorst_byVertex_";
+        path = "InsuccessWorst/byVertex";
+        customLabelx = "Numero de vertices do Grafo";
+        customTitle = "Variaçao do numero de vertices";
+    end
+else
+    status = system(sprintf("./execute_topoInsuccessBest.sh %d %d %d",vertex_min,vertex_inc,vertex_max)); 
+    customLegend = sprintf("V%d",vertex_max);
+    preName = "insuccessBest_byVertex_";
+    path = "InsuccessBest";
+    customLabelx = "Numero de vertices do Grafo";
+    customTitle = "Variaçao do numero de arestas";
+end  
 
 
 file = fopen("data_topoTests.txt","r");

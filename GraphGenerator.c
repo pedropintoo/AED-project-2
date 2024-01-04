@@ -15,7 +15,7 @@
 
 Graph *GraphGenerateTopoSuccess(unsigned int numVertices, unsigned int numEdges)
 {
-    assert(numEdges <= numVertices*(numVertices-1)/2); // Max number of edges
+    assert(numEdges <= numVertices*(numVertices-1)/2 - 2*(numVertices-2)); // Max number of edges
     assert(numEdges > 0);
 
     Graph* g = GraphCreate(numVertices, 1, 0);

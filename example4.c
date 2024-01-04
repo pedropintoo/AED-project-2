@@ -14,7 +14,7 @@
 
 int main(void) {
   
-  Graph* originalG = GraphGenerateTopoInsuccessWorst(10,12);
+  Graph* originalG = GraphGenerateTopoSuccess(20,154);
 
   GraphDisplay(originalG);
 

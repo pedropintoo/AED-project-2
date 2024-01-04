@@ -1,5 +1,10 @@
 %% Constantes a alterar.....
 
+CASE = 0;
+% 0-> Sucesso - Melhor/Pior caso
+% 1-> Nao Sucesso - Pior caso
+% 2-> Nao Sucesso - Melhor caso
+
 OPTION = 1; 
 % 0-> Por Edge (mesmo numero de vertices)
 % 1-> Por Vertex (mesmo numero de arestas)
@@ -12,7 +17,7 @@ edge_max = 5;
 % Vertex -> numero de vertices
 vertex_min = 100;
 vertex_inc = 10;
-vertex_max = 1000;
+vertex_max = 200;
 
 % ????????????????????????????????????
 onlyV2 = 0; % 1-> Graficos com apenas a versao 2 (algoritmo melhorado)
@@ -27,7 +32,7 @@ colorV3 = "o-"; % Green: "#77AC30"
 % Para sobrepor ao grafico outro com window_max=2 (dx=dy), basta retirar "r" e "b" das
 % cores de cima e mudar os valores window_max e executar "Executar e ler dados"
 
-
+preName = "";
 onlyV2path = "";
 
 if (onlyV2 == 1)
@@ -37,19 +42,23 @@ end
 
 % Executar e ler dados
 % generate the file text with data
-if (OPTION == 0) 
-    status = system(sprintf("./execute_topoTests.sh %d %d %d %d %d %d",0,edge_min,edge_inc,edge_max,vertex_max)); 
-    customLegend = sprintf("V%d",vertex_max);
-    path = "byEdge";
-    customLabelx = "Numero de arestas do Grafo";
-    customTitle = "Variaçao do numero de arestas";
-else
-    status = system(sprintf("./execute_topoTests.sh %d %d %d %d %d",1,vertex_min,vertex_inc,vertex_max,edge_max)); 
-    customLegend = sprintf("E%d",edge_max);
-    path = "byVertex";
-    customLabelx = "Numero de vertices do Grafo";
-    customTitle = "Variaçao do numero de vertices";
-end
+if (CASE == 0)
+    if (OPTION == 0) 
+        status = system(sprintf("./execute_topoSuccess.sh %d %d %d %d %d %d",0,edge_min,edge_inc,edge_max,vertex_max)); 
+        customLegend = sprintf("V%d",vertex_max);
+        preName = "success_byEdge_";
+        path = "Success/byEdge";
+        customLabelx = "Numero de arestas do Grafo";
+        customTitle = "Variaçao do numero de arestas";
+    else
+        status = system(sprintf("./execute_topoSuccess.sh %d %d %d %d %d",1,vertex_min,vertex_inc,vertex_max,edge_max)); 
+        customLegend = sprintf("E%d",edge_max);
+        preName = "success_byVertex_";
+        path = "Success/byVertex";
+        customLabelx = "Numero de vertices do Grafo";
+        customTitle = "Variaçao do numero de vertices";
+    end
+end    
 
 
 file = fopen("data_topoTests.txt","r");
@@ -88,7 +97,7 @@ if printAll
   f1_time.PaperType='A4';
   f1_time.PaperOrientation='landscape';
   f1_time.PaperUnits='points';
-  print(sprintf("%s/time/%s%stime_E%d_V%d.pdf",path,onlyV2path,edge_max,vertex_max),'-dpdf','-noui','-fillpage');
+  print(sprintf("%s/time/%s%stime_E%d_V%d.pdf",path,preName,onlyV2path,edge_max,vertex_max),'-dpdf','-noui','-fillpage');
 end
 
 
@@ -107,16 +116,16 @@ hold on;
 plot(nStudyArray(3:3:end),ITERATIONSArray(3:3:end),colorV3,'DisplayName',sprintf("Versao 3 - %s",customLegend));
 
 grid on
-title(sprintf("Numero de iteraçoes em funcao de %s",customTitle))
+title(sprintf("Iteracoes em funcao de %s",customTitle))
 xlabel(customLabelx)
 ylabel("Numero de iteracoes (ITERATIONS)")
 legend
 
 if printAll
-  f3_comparisons.PaperType='A4';
-  f3_comparisons.PaperOrientation='landscape';
-  f3_comparisons.PaperUnits='points';
-  print(sprintf("%s/iterations/%siterations_E%d_V%d.pdf",path,onlyV2path,edge_max,vertex_max),'-dpdf','-noui','-fillpage');
+  f2_iterations.PaperType='A4';
+  f2_iterations.PaperOrientation='landscape';
+  f2_iterations.PaperUnits='points';
+  print(sprintf("%s/iterations/%s%siterations_E%d_V%d.pdf",path,preName,onlyV2path,edge_max,vertex_max),'-dpdf','-noui','-fillpage');
 end
 
 %% Numero de operacoes relevantes (OPERATIONS) em funcao de n
@@ -134,14 +143,14 @@ hold on;
 plot(nStudyArray(3:3:end),OPERATIONSArray(3:3:end),colorV3,'DisplayName',sprintf("Versao 3 - %s",customLegend));
 
 grid on
-title(sprintf("Numero de operacoes (relevantes) em funcao de %s",customTitle))
+title(sprintf("Operacoes em funcao de %s",customTitle))
 xlabel(customLabelx)
 ylabel("Numero de operacoes (OPERATIONS)")
 legend
 
 if printAll
-  f4_operations.PaperType='A4';
-  f4_operations.PaperOrientation='landscape';
-  f4_operations.PaperUnits='points';
-  print(sprintf("%s/operations/%soperations_E%d_V%d.pdf",path,onlyV2path,edge_max,vertex_max),'-dpdf','-noui','-fillpage');
+  f3_operations.PaperType='A4';
+  f3_operations.PaperOrientation='landscape';
+  f3_operations.PaperUnits='points';
+  print(sprintf("%s/operations/%s%soperations_E%d_V%d.pdf",path,preName,onlyV2path,edge_max,vertex_max),'-dpdf','-noui','-fillpage');
 end

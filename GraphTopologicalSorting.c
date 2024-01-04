@@ -88,7 +88,6 @@ GraphTopoSort* GraphTopoSortComputeV1(Graph* g) {
   unsigned int numVertices = topoSort->numVertices;
   
   Graph* g_copy = GraphCopy(g);
-  OPERATIONS += GraphGetNumEdges(g_copy); // ~numEdge operations in GraphCopy
 
   // index of sequence
   unsigned int s = 0; 
@@ -110,7 +109,7 @@ GraphTopoSort* GraphTopoSortComputeV1(Graph* g) {
         unsigned int* adjacentsTo = GraphGetAdjacentsTo(g_copy, v); // allocate memory !!
         for (unsigned int i = 1; i <= adjacentsTo[0]; i++) { // element 0, stores the number of adjacent vertices
           GraphRemoveEdge(g_copy, v, adjacentsTo[i]);
-          OPERATIONS+=3;
+          OPERATIONS++;
         }
         free(adjacentsTo);
 
@@ -148,7 +147,6 @@ GraphTopoSort* GraphTopoSortComputeV2(Graph* g) {
 
   // Start all the incoming edge in aux array
   for (unsigned int i = 0; i < numVertices; i++) {
-    OPERATIONS++;
     topoSort->numIncomingEdges[i] = GraphGetVertexInDegree(g,i);
   }
 
@@ -217,7 +215,6 @@ GraphTopoSort* GraphTopoSortComputeV3(Graph* g) {
 
   // Start all the incoming edge in aux array
   for (unsigned int i = 0; i < numVertices; i++) {
-    OPERATIONS+=2;
     int inDegree = GraphGetVertexInDegree(g,i);
     topoSort->numIncomingEdges[i] = inDegree;
     if (inDegree == 0) QueueEnqueue(queue,i);
@@ -245,7 +242,7 @@ GraphTopoSort* GraphTopoSortComputeV3(Graph* g) {
       unsigned int w = adjacentsTo[i];
 
       if (--topoSort->numIncomingEdges[w] == 0) QueueEnqueue(queue,w);
-      OPERATIONS+=2;
+      OPERATIONS++;
     }
     free(adjacentsTo);
 

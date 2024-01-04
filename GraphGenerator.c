@@ -16,9 +16,12 @@
 Graph *GraphGenerateSuccessTopoOrder(unsigned int numVertices, unsigned int numEdges)
 {
     assert(numEdges <= numVertices*(numVertices-1)/2); // Max number of edges
+    assert(numEdges > 0);
 
     Graph* g = GraphCreate(numVertices, 1, 0);
     srand(time(NULL));
+
+    GraphAddEdge(g,0,1);
 
     while (GraphGetNumEdges(g) != numEdges) {
         for (unsigned int v = 0; v < numVertices - 1; v++) { // last vertex don't have adjacents
@@ -49,6 +52,10 @@ Graph *GraphGenerateComplete(unsigned int numVertices)
 }
 
 Graph *GraphGenerateInsuccessTopoOrderWithCycle(unsigned int numVertices, unsigned int numEdges)
-{
-    return NULL;
+{   
+    Graph* originalG = GraphGenerateSuccessTopoOrder(numVertices,numEdges-1);
+
+    GraphAddEdge(originalG,1,0); // add loop in 2 lowest id vertices 
+    GraphDisplay(originalG);
+    return originalG;
 }

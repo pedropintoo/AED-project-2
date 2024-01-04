@@ -1,26 +1,28 @@
 %% Constantes a alterar.....
 
-OPTION = 0; 
-% 0-> Por size (mesma janela de blur, imagem varia)
-% 1-> Por window (mesma imagem, janela de blur varia)
+OPTION = 1; 
+% 0-> Por Edge (mesmo numero de vertices)
+% 1-> Por Vertex (mesmo numero de arestas)
 
-% Size -> largura da imagem (sendo a imagem quadrada) 
-size_min = 1;
-size_inc = 1;
-size_max = 50; % w = h
+% Edge -> numero de arestas 
+edge_min = 1;
+edge_inc = 1;
+edge_max = 5;
 
-% Window -> janela do blur (sendo a janela quadrada) 
-window_min = 1;
-window_inc = 1;
-window_max = 70; % dx = dy
+% Vertex -> numero de vertices
+vertex_min = 100;
+vertex_inc = 10;
+vertex_max = 1000;
 
-onlyV2 = 1; % 1-> Graficos com apenas a versao 2 (algoritmo melhorado)
+% ????????????????????????????????????
+onlyV2 = 0; % 1-> Graficos com apenas a versao 2 (algoritmo melhorado)
 % Podemos sobrepor no mesmo grafico utilizando os conceitos de cima
 
 printAll = 1;
 
-colorV1 = "o-";
-colorV2 = "o-";
+colorV1 = "or-";
+colorV2 = "ob--";
+colorV3 = "o-";
 % Na OPTION == 0:
 % Para sobrepor ao grafico outro com window_max=2 (dx=dy), basta retirar "r" e "b" das
 % cores de cima e mudar os valores window_max e executar "Executar e ler dados"
@@ -36,42 +38,45 @@ end
 % Executar e ler dados
 % generate the file text with data
 if (OPTION == 0) 
-    status = system(sprintf("./execute_blurTests.sh %d %d %d %d %d %d",0,size_min,size_inc,size_max,window_max,window_max)); 
-    customLegend = sprintf("W%dx%d",window_max,window_max);
-    path = "bySize";
-    customLabelx = "Numero de pixeis da imagem";
-    customTitle = "n";
+    status = system(sprintf("./execute_topoTests.sh %d %d %d %d %d %d",0,edge_min,edge_inc,edge_max,vertex_max)); 
+    customLegend = sprintf("V%d",vertex_max);
+    path = "byEdge";
+    customLabelx = "Numero de arestas do Grafo";
+    customTitle = "Variaçao do numero de arestas";
 else
-    status = system(sprintf("./execute_blurTests.sh %d %d %d %d %d %d",1,window_min,window_inc,window_max,size_max,size_max)); 
-    customLegend = sprintf("S%dx%d",size_max,size_max);
-    path = "byWindow";
-    customLabelx = "Valor 'dx' da janela de blur (dx=dy)";
-    customTitle = "dx";
+    status = system(sprintf("./execute_topoTests.sh %d %d %d %d %d",1,vertex_min,vertex_inc,vertex_max,edge_max)); 
+    customLegend = sprintf("E%d",edge_max);
+    path = "byVertex";
+    customLabelx = "Numero de vertices do Grafo";
+    customTitle = "Variaçao do numero de vertices";
 end
 
 
-file = fopen("data_blurTests.txt","r");
-formatSpec = '%d %f %f %d %d %d %d';
+file = fopen("data_topoTests.txt","r");
+formatSpec = '%d %f %f %d %d';
 data = textscan(file, formatSpec);
 fclose(file);
 
-nPixelsArray = double(data{1});
+nStudyArray = double(data{1}); % Vertices or Edges
 timeArray = double(data{2}); % 1
 caltimeArray = double(data{3});
-PIXMEMArray = double(data{4}); % 2
-COMPARISONSArray = double(data{5}); % 3
-OPERATIONSArray = double(data{6}); % 4
+ITERATIONSArray = double(data{4}); % 2
+OPERATIONSArray = double(data{5}); % 3
 
 %% Tempo de execucao em funcao de n
 f1_time = figure(1);
 
-if (onlyV2 == 0)
-    %Version 1
-    plot(nPixelsArray(1:2:end),timeArray(1:2:end),colorV1,'DisplayName',sprintf("Versao 1 - %s",customLegend));
-end
+
+%Version 1
+plot(nStudyArray(1:3:end),timeArray(1:3:end),colorV1,'DisplayName',sprintf("Versao 1 - %s",customLegend));
+
 hold on;
 % Version 2
-plot(nPixelsArray(2:2:end),timeArray(2:2:end),colorV2,'DisplayName',sprintf("Versao 2 - %s",customLegend));
+plot(nStudyArray(2:3:end),timeArray(2:3:end),colorV2,'DisplayName',sprintf("Versao 2 - %s",customLegend));
+
+hold on;
+% Version 2
+plot(nStudyArray(3:3:end),timeArray(3:3:end),colorV3,'DisplayName',sprintf("Versao 3 - %s",customLegend));
 
 grid on
 title(sprintf("Tempo de execucao em funcao de %s",customTitle))
@@ -83,68 +88,50 @@ if printAll
   f1_time.PaperType='A4';
   f1_time.PaperOrientation='landscape';
   f1_time.PaperUnits='points';
-  print(sprintf("%s/time/%stime_S%dx%d_W%dx%d.pdf",path,onlyV2path,size_max,size_max,window_max,window_max),'-dpdf','-noui','-fillpage');
+  print(sprintf("%s/time/%s%stime_E%d_V%d.pdf",path,onlyV2path,edge_max,vertex_max),'-dpdf','-noui','-fillpage');
 end
 
 
-%% Numero de acessos (PIXMEM) em funcao de n
-f2_pixmem = figure(2);
+%% Numero de iteracoes em funcao de n
+f2_iterations = figure(2);
 
-if (onlyV2 == 0)
-    %Version 1
-    plot(nPixelsArray(1:2:end),PIXMEMArray(1:2:end),colorV1,'DisplayName',sprintf("Versao 1 - %s",customLegend));
-end
+%Version 1
+plot(nStudyArray(1:3:end),ITERATIONSArray(1:3:end),colorV1,'DisplayName',sprintf("Versao 1 - %s",customLegend));
+
 hold on;
 % Version 2
-plot(nPixelsArray(2:2:end),PIXMEMArray(2:2:end),colorV2,'DisplayName',sprintf("Versao 2 - %s",customLegend));
+plot(nStudyArray(2:3:end),ITERATIONSArray(2:3:end),colorV2,'DisplayName',sprintf("Versao 2 - %s",customLegend));
 
-grid on
-title(sprintf("Numero de acessos (PIXMEM) em funcao de %s",customTitle))
-xlabel(customLabelx)
-ylabel("Numero de acessos (PIXMEM)")
-legend
-
-if printAll
-  f2_pixmem.PaperType='A4';
-  f2_pixmem.PaperOrientation='landscape';
-  f2_pixmem.PaperUnits='points';
-  print(sprintf("%s/pixmem/%spixmem_S%dx%d_W%dx%d.pdf",path,onlyV2path,size_max,size_max,window_max,window_max),'-dpdf','-noui','-fillpage');
-end
-
-%% Numero de comparacoes em funcao de n
-f3_comparisons = figure(3);
-
-if (onlyV2 == 0)
-    %Version 1
-    plot(nPixelsArray(1:2:end),COMPARISONSArray(1:2:end),colorV1,'DisplayName',sprintf("Versao 1 - %s",customLegend));
-end
 hold on;
 % Version 2
-plot(nPixelsArray(2:2:end),COMPARISONSArray(2:2:end),colorV2,'DisplayName',sprintf("Versao 2 - %s",customLegend));
+plot(nStudyArray(3:3:end),ITERATIONSArray(3:3:end),colorV3,'DisplayName',sprintf("Versao 3 - %s",customLegend));
 
 grid on
-title(sprintf("Numero de comparacoes em funcao de %s",customTitle))
+title(sprintf("Numero de iteraçoes em funcao de %s",customTitle))
 xlabel(customLabelx)
-ylabel("Numero de comparacoes (COMPARISONS)")
+ylabel("Numero de iteracoes (ITERATIONS)")
 legend
 
 if printAll
   f3_comparisons.PaperType='A4';
   f3_comparisons.PaperOrientation='landscape';
   f3_comparisons.PaperUnits='points';
-  print(sprintf("%s/comparisons/%scomparisons_S%dx%d_W%dx%d.pdf",path,onlyV2path,size_max,size_max,window_max,window_max),'-dpdf','-noui','-fillpage');
+  print(sprintf("%s/iterations/%siterations_E%d_V%d.pdf",path,onlyV2path,edge_max,vertex_max),'-dpdf','-noui','-fillpage');
 end
 
 %% Numero de operacoes relevantes (OPERATIONS) em funcao de n
-f4_operations = figure(4);
+f3_operations = figure(3);
 
-if (onlyV2 == 0)
-    %Version 1
-    plot(nPixelsArray(1:2:end),OPERATIONSArray(1:2:end),colorV1,'DisplayName',sprintf("Versao 1 - %s",customLegend));
-end
+%Version 1
+plot(nStudyArray(1:3:end),OPERATIONSArray(1:3:end),colorV1,'DisplayName',sprintf("Versao 1 - %s",customLegend));
+
 hold on;
 % Version 2
-plot(nPixelsArray(2:2:end),OPERATIONSArray(2:2:end),colorV2,'DisplayName',sprintf("Versao 2 - %s",customLegend));
+plot(nStudyArray(2:3:end),OPERATIONSArray(2:3:end),colorV2,'DisplayName',sprintf("Versao 2 - %s",customLegend));
+
+hold on;
+% Version 2
+plot(nStudyArray(3:3:end),OPERATIONSArray(3:3:end),colorV3,'DisplayName',sprintf("Versao 3 - %s",customLegend));
 
 grid on
 title(sprintf("Numero de operacoes (relevantes) em funcao de %s",customTitle))
@@ -156,5 +143,5 @@ if printAll
   f4_operations.PaperType='A4';
   f4_operations.PaperOrientation='landscape';
   f4_operations.PaperUnits='points';
-  print(sprintf("%s/operations/%soperations_S%dx%d_W%dx%d.pdf",path,onlyV2path,size_max,size_max,window_max,window_max),'-dpdf','-noui','-fillpage');
+  print(sprintf("%s/operations/%soperations_E%d_V%d.pdf",path,onlyV2path,edge_max,vertex_max),'-dpdf','-noui','-fillpage');
 end

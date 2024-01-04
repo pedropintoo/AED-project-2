@@ -20,9 +20,15 @@ example3: example3.o Graph.o GraphTopologicalSorting.o \
  IntegersQueue.o SortedList.o instrumentation.o
 
 example4: example4.o Graph.o SortedList.o GraphGenerator.o \
- instrumentation.o
+ instrumentation.o GraphTopologicalSorting.o IntegersQueue.o
 
-GraphTestTopo: GraphTestTopo.o Graph.o GraphTopologicalSorting.o \
+GraphTestTopoSuccess: GraphTestTopoSuccess.o Graph.o GraphTopologicalSorting.o \
+ IntegersQueue.o GraphGenerator.o SortedList.o instrumentation.o
+
+GraphTestTopoInsuccessBest: GraphTestTopoInsuccessBest.o Graph.o GraphTopologicalSorting.o \
+ IntegersQueue.o GraphGenerator.o SortedList.o instrumentation.o
+
+GraphTestTopoInsuccessWorst: GraphTestTopoInsuccessWorst.o Graph.o GraphTopologicalSorting.o \
  IntegersQueue.o GraphGenerator.o SortedList.o instrumentation.o
 
 # Include dependencies (generated with gcc -MMD)

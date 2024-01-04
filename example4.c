@@ -9,40 +9,66 @@
 #include <stdlib.h>
 
 #include "Graph.h"
+#include "GraphGenerator.h"
+#include "GraphTopologicalSorting.h"
 
 int main(void) {
+  
+  Graph* originalG;
 
-  // GraphCopy
-	Graph* g01 = GraphCreate(6, 1, 1); // (numVertices, isDigraph, isWeighted)
-	Graph* g01_copy = GraphCopy(g01);
-	GraphAddWeightedEdge(g01, 1, 2,0);
-	GraphAddWeightedEdge(g01, 1, 4,0);
-	GraphAddWeightedEdge(g01, 3, 4,0);
-	printf("The first graph:\n");
-	GraphDisplay(g01);
-  GraphAddWeightedEdge(g01_copy, 2, 4,0.5);
-  printf("The copy graph:\n");
-  GraphDisplay(g01_copy);
+  while(1) {
+      originalG = GraphGenerateSuccessTopoOrder(5,8);
 
-	GraphDestroy(&g01);
-	GraphDestroy(&g01_copy);
+      unsigned int* adjacentsTo = GraphGetAdjacentsTo(originalG, 0); // allocate memory !!
+      unsigned int check = 0;
+      for (unsigned int i = 1; i <= adjacentsTo[0]; i++) { // element 0, stores the number of adjacent vertices
+      if (adjacentsTo[i] == 1) {
+          check = 1;
+          break;
+      }
+      }
+      free(adjacentsTo);
 
-  // GraphGraphFromFile
-  printf("\n\n");
-  FILE* f = fopen("GRAPHS/SWmediumDG.txt","r");
-  Graph* g02 = GraphFromFile(f);
-  GraphDisplay(g02);
-
-  // GraphRemoveEdge
-  printf("After remove (6,3):\n");
-  GraphRemoveEdge(g02,6,2);
-  GraphDisplay(g02);
-  for (unsigned int i = 0; i < GraphGetNumVertices(g02); i++) {
-    GraphListAdjacents(g02, i);
+      if (check == 0) {
+      GraphDestroy(&originalG);
+      } else break;
   }
 
-  GraphDestroy(&g02);
-  fclose(f);
+  GraphAddEdge(originalG,1,0);
+  
+  GraphDisplay(originalG);
+  GraphDestroy(&originalG);
+  // GraphCopy
+	// Graph* g01 = GraphCreate(6, 1, 1); // (numVertices, isDigraph, isWeighted)
+	// Graph* g01_copy = GraphCopy(g01);
+	// GraphAddWeightedEdge(g01, 1, 2,0);
+	// GraphAddWeightedEdge(g01, 1, 4,0);
+	// GraphAddWeightedEdge(g01, 3, 4,0);
+	// printf("The first graph:\n");
+	// GraphDisplay(g01);
+  // GraphAddWeightedEdge(g01_copy, 2, 4,0.5);
+  // printf("The copy graph:\n");
+  // GraphDisplay(g01_copy);
+
+	// GraphDestroy(&g01);
+	// GraphDestroy(&g01_copy);
+
+  // // GraphGraphFromFile
+  // printf("\n\n");
+  // FILE* f = fopen("GRAPHS/SWmediumDG.txt","r");
+  // Graph* g02 = GraphFromFile(f);
+  // GraphDisplay(g02);
+
+  // // GraphRemoveEdge
+  // printf("After remove (6,3):\n");
+  // GraphRemoveEdge(g02,6,2);
+  // GraphDisplay(g02);
+  // for (unsigned int i = 0; i < GraphGetNumVertices(g02); i++) {
+  //   GraphListAdjacents(g02, i);
+  // }
+
+  // GraphDestroy(&g02);
+  // fclose(f);
 
 	return 0;
 }

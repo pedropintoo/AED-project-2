@@ -386,6 +386,7 @@ static int _addEdge(Graph* g, unsigned int v, unsigned int w, double weight) {
   int result = ListInsert(vertex->edgesList, edge);
 
   if (result == -1) {
+    free(edge); // new!
     return 0;
   } else {
     g->numEdges++;
@@ -514,9 +515,6 @@ int GraphCheckInvariants(const Graph* g) {
   // TO BE COMPLETED !!
   
   List* verticesList = g->verticesList;
-
-  // 0) A graph with V vertices has at most V(V-1)/2 edges.
-  if( g->numEdges > g->numVertices*(g->numVertices-1)/2 ) return 0;
 
   // 1) Correct number of vertices in the list.
   if(g->numVertices != ListGetSize(verticesList)) return 0;

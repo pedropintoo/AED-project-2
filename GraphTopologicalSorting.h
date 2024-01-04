@@ -10,6 +10,10 @@
 #include "Graph.h"
 #include "IntegersQueue.h"
 
+/// Init Image library.  (Call once!)
+/// Currently, simply calibrate instrumentation and set names of counters.
+void TopoInit(void) ;
+
 typedef struct _GraphTopoSort GraphTopoSort;
 
 GraphTopoSort* GraphTopoSortComputeV1(Graph* g);

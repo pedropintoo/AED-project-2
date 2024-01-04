@@ -13,25 +13,6 @@
 #include <stdlib.h>
 
 #include "SortedList.h"
-#include "instrumentation.h"
-
-
-/// Init Image library.  (Call once!)
-/// Currently, simply calibrate instrumentation and set names of counters.
-void GraphInit(void) { ///
-  InstrCalibrate();
-  // Name counters here...
-  InstrName[0] = "pixmem";  // InstrCount[0] will count pixel array acesses
-  InstrName[1] = "comparisons";
-  InstrName[2] = "operations";
-}
-
-// Macros to simplify accessing instrumentation counters:
-// Add macros here...
-#define PIXMEM InstrCount[0]
-#define COMPARISONS InstrCount[1]
-#define OPERATIONS InstrCount[2]
-
 
 struct _Vertex {
   unsigned int id;

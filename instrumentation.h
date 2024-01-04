@@ -50,5 +50,8 @@ void InstrReset(void) ;
 
 void InstrPrint(void) ;
 
+// For tests...
+void InstrPrintTest(unsigned int numInStudy) ;
+
 #endif
 

@@ -127,3 +127,17 @@ void InstrPrint(void) { ///
   puts("");
 }
 
+// For tests...
+void InstrPrintTest(unsigned int numInStudy) { ///
+  // elapsed time since last reset:
+  double time = cpu_time() - InstrTime;
+  // compute time in calibrated time units:
+  double caltime = time / InstrCTU;
+
+  printf("%d\t%f\t%f",numInStudy, time, caltime);
+  for (int i = 0; i < NUMCOUNTERS; i++)
+    if (InstrName[i] != NULL)
+      printf("\t%lu", InstrCount[i]);  
+  puts("");
+}
+

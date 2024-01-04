@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
     
   for (int numVertices = atoi(argv[1]); numVertices <= atoi(argv[3]); numVertices+= atoi(argv[2])) {
   
-    Graph* originalG = GraphGenerateComplete(numVertices);
+    Graph* originalG = GraphGenerateTopoInsuccessBest(numVertices);
     
     for (int version = 0; version < VERSIONS; version++) {
         TopoSortFcn sortFcn = topoSortFcns[version];

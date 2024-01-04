@@ -13,7 +13,7 @@
 
 #include "Graph.h"
 
-Graph *GraphGenerateSuccessTopoOrder(unsigned int numVertices, unsigned int numEdges)
+Graph *GraphGenerateTopoSuccess(unsigned int numVertices, unsigned int numEdges)
 {
     assert(numEdges <= numVertices*(numVertices-1)/2); // Max number of edges
     assert(numEdges > 0);
@@ -45,15 +45,15 @@ Graph *GraphGenerateSuccessTopoOrder(unsigned int numVertices, unsigned int numE
     return g;
 }
 
-Graph *GraphGenerateComplete(unsigned int numVertices)
+Graph *GraphGenerateTopoInsuccessBest(unsigned int numVertices)
 {
     // Generate a complete digraph
     return GraphCreateComplete(numVertices, 1);
 }
 
-Graph *GraphGenerateInsuccessTopoOrderWithCycle(unsigned int numVertices, unsigned int numEdges)
+Graph *GraphGenerateTopoInsuccessWorst(unsigned int numVertices, unsigned int numEdges)
 {   
-    Graph* originalG = GraphGenerateSuccessTopoOrder(numVertices,numEdges-1);
+    Graph* originalG = GraphGenerateTopoSuccess(numVertices,numEdges-1);
 
     GraphAddEdge(originalG,1,0); // add loop in 2 lowest id vertices 
     GraphDisplay(originalG);

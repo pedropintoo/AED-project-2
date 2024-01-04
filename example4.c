@@ -14,28 +14,8 @@
 
 int main(void) {
   
-  Graph* originalG;
+  Graph* originalG = GraphGenerateTopoInsuccessWorst(10,15);
 
-  while(1) {
-      originalG = GraphGenerateSuccessTopoOrder(5,8);
-
-      unsigned int* adjacentsTo = GraphGetAdjacentsTo(originalG, 0); // allocate memory !!
-      unsigned int check = 0;
-      for (unsigned int i = 1; i <= adjacentsTo[0]; i++) { // element 0, stores the number of adjacent vertices
-      if (adjacentsTo[i] == 1) {
-          check = 1;
-          break;
-      }
-      }
-      free(adjacentsTo);
-
-      if (check == 0) {
-      GraphDestroy(&originalG);
-      } else break;
-  }
-
-  GraphAddEdge(originalG,1,0);
-  
   GraphDisplay(originalG);
   GraphDestroy(&originalG);
   // GraphCopy

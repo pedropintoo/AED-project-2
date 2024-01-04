@@ -7,7 +7,7 @@ CC = gcc
 CFLAGS += -g -Wall -Wextra
 CPPFLAGS += -MMD
 
-TARGETS = example1 example2 example3 example4
+TARGETS = example1 example2 example3 example4 GraphTestTopoSuccess GraphTestTopoInsuccessBest GraphTestTopoInsuccessWorst
 
 all: $(TARGETS)
 

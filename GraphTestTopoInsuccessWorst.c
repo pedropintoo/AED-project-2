@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
     
     for (int numEdges = atoi(argv[2]); numEdges <= atoi(argv[4]); numEdges+= atoi(argv[3])) {
     
-      Graph* originalG = GraphGenerateInsuccessTopoOrderWithCycle(NUM_VERTICES,numEdges);
+      Graph* originalG = GraphGenerateTopoInsuccessWorst(NUM_VERTICES,numEdges);
 
       for (int version = 0; version < VERSIONS; version++) {
           TopoSortFcn sortFcn = topoSortFcns[version];
@@ -69,7 +69,7 @@ int main(int argc, char* argv[]) {
 
     for (int numVertices = atoi(argv[2]); numVertices <= atoi(argv[4]); numVertices+= atoi(argv[3])) {
     
-      Graph* originalG = GraphGenerateInsuccessTopoOrderWithCycle(numVertices,NUM_EDGES);
+      Graph* originalG = GraphGenerateTopoInsuccessWorst(numVertices,NUM_EDGES);
 
 
       for (int version = 0; version < VERSIONS; version++) {

@@ -4,13 +4,13 @@ caseNames = ["Sucesso (Pior caso)", "Sucesso (Melhor caso)","Insucesso (Pior cas
 caseFileNames = ["Success_worstCase_", "Success_bestCase_","Insuccess_worstCase_", "Insuccess_bestCase_"];
 casePathNames = ["SuccessWorst", "SuccessBest","InsuccessWorst", "InsuccessBest"];
 
-CASE = 3;
+CASE = 0;
 % 0-> Sucesso - Pior caso
 % 1-> Sucesso - Melhor caso
 % 2-> Insucesso - Pior caso
 % 3-> Insucesso - Melhor caso
 
-ONLY = 1;
+ONLY = 0;
 % 1-> Algoritmo 1
 % 2-> Algoritmo 2
 % 3-> Algoritmo 3
@@ -21,7 +21,7 @@ vertex_min = 2;
 vertex_inc = 1;
 vertex_max = 250;
 
-printAll = 0;
+printAll = 1;
 
 colorV1 = "o-"; 
 colorV2 = "ob-"; 

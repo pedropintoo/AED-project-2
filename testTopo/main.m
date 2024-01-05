@@ -10,7 +10,7 @@ CASE = 3;
 % 2-> Insucesso - Pior caso
 % 3-> Insucesso - Melhor caso
 
-ONLY = 1;
+ONLY = 3;
 % 1-> Algoritmo 1
 % 2-> Algoritmo 2
 % 3-> Algoritmo 3
@@ -21,15 +21,14 @@ vertex_min = 2;
 vertex_inc = 1;
 vertex_max = 250;
 
-printAll = 0;
+printAll = 1;
 
-colorV1 = "o-"; 
+colorV1 = "or-"; 
 colorV2 = "ob-"; 
 colorV2alternative = "ob-"; % Por causa da sobreposicao no grafico das iteracoes!
 colorV3 = "o-"; % Yellow: "[0.9290 0.6940 0.1250]"
 
 customLegend = caseNames(CASE+1);
-pathName = casePathNames(CASE+1);
 
 % Controlo dos algoritmos que iram ser apresentados
 show1 = 0;
@@ -38,18 +37,22 @@ show3 = 0;
 switch (ONLY)
     case 1 % Algoritmo 1
         fileName = "onlyAlg1_";
+        pathName = "only";
         show1 = 1;
     case 2 % Algoritmo 2
-        fileName = "onlyAlg1_";
+        fileName = "onlyAlg2_";
+        pathName = "only";
         show2 = 1;
     case 3 % Algoritmo 3
-        fileName = "onlyAlg1_";
+        fileName = "onlyAlg3_";
+        pathName = "only";
         show3 = 1;
     otherwise % Desativado
         show1 = 1;
         show2 = 1;
         show3 = 1;
         fileName = caseFileNames(CASE+1);
+        pathName = casePathNames(CASE+1);
 end
 
 %% Executar e ler o output
@@ -86,7 +89,7 @@ end
 if (show3)
     hold on;
     % Version 3
-    plot(verticesArray(3:3:end),timeArray(3:3:end),colorV3,'color',[0.9290 0.6940 0.1250],'DisplayName',sprintf("Algoritmo 3 - %s",customLegend));
+    plot(verticesArray(3:3:end),timeArray(3:3:end),colorV3,'DisplayName',sprintf("Algoritmo 3 - %s",customLegend));
 end
 
 grid on
@@ -121,7 +124,7 @@ end
 if (show3)
     hold on;
     % Version 3
-    plot(verticesArray(3:3:end),ITERATIONSArray(3:3:end),colorV3,'color',[0.9290 0.6940 0.1250],'DisplayName',sprintf("Algoritmo 3 - %s",customLegend));
+    plot(verticesArray(3:3:end),ITERATIONSArray(3:3:end),colorV3,'DisplayName',sprintf("Algoritmo 3 - %s",customLegend));
 end
 
 grid on

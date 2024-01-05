@@ -21,11 +21,11 @@ vertex_min = 2;
 vertex_inc = 1;
 vertex_max = 250;
 
-printAll = 1;
+printAll = 0;
 
-colorV1 = "or-"; 
-colorV2 = "ob-"; 
-colorV2alternative = "ob-"; % Por causa da sobreposicao no grafico das iteracoes!
+colorV1 = "o-"; 
+colorV2 = "o-"; 
+colorV2alternative = "o-"; % Por causa da sobreposicao no grafico das iteracoes!
 colorV3 = "o-"; % Yellow: "[0.9290 0.6940 0.1250]"
 
 customLegend = caseNames(CASE+1);
@@ -72,6 +72,7 @@ ITERATIONSArray = double(data{4}); % 2
 f1_time = figure(1);
 
 if (show1)
+    hold on;
     %Version 1
     plot(verticesArray(1:3:end),timeArray(1:3:end),colorV1,'DisplayName',sprintf("Algoritmo 1 - %s",customLegend));
 end
@@ -106,6 +107,7 @@ end
 f2_iterations = figure(2);
 
 if (show1)
+    hold on;
     %Version 1
     plot(verticesArray(1:3:end),ITERATIONSArray(1:3:end),colorV1,'DisplayName',sprintf("Algoritmo 1 - %s",customLegend));
 end

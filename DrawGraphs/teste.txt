@@ -1,10 +1,9 @@
 ---
 Digraph
-Max Out-Degree = 2
-Vertices =  5 | Edges =  5
-0 ->    1
-1 ->    2    4
-2 ->    3
-3 ->    1
-4 ->
+Max Out-Degree = 1
+Vertices =  4 | Edges =  4
+ 0 ->    1
+ 1 ->    2
+ 2 ->    3
+ 3 ->    0
 ---

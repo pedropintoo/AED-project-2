@@ -1,0 +1,1 @@
+Para ordem topologica, colocar "{ rank=same; 0 1 2 3 }" na ultima linha do .dot

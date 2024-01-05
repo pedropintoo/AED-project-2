@@ -118,7 +118,7 @@ O grafo da Figura d) representa o caso Insucesso - BestCase uma vez que o grafo 
 
 %% Como traçar os gráficos?
 De forma a compararmos os tempos de execução para os 3 algoritmos e traçarmos os respetivos gráficos 
-desenvolvemos um script matlab main.m que executa um ficheiro shell e lê do ficheiro "testTopo/data_topoTests.txt" as variáveis nVerticesArray, timeArray, caltimeArray, ITERATIONSArray.
+desenvolvemos um script matlab main.m que executa um ficheiro shell e lê do ficheiro "testTopo/data_topoTests.txt" as variáveis verticesArray, timeArray, caltimeArray, ITERATIONSArray.
 % Colocar o que metemos no outro relatório
 
 Em baixo apresentamos os tempos de execucao em funcao do número de vértices para os três algoritmos para os 4 diferentes casos.

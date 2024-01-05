@@ -1,6 +1,6 @@
 %% Constantes a alterar.....
 
-CASE = 1;
+CASE = 0;
 % 0-> Sucesso - Melhor/Pior caso
 % 1-> Nao Sucesso - Pior caso
 % 2-> Nao Sucesso - Melhor caso

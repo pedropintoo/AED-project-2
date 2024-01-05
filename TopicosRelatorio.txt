@@ -1,4 +1,4 @@
-Nota: O PM ainda não sabe se vai ser preciso criar 4 codigos shell e 4 codigos main ou se dá só para usar 1.
+
 
 Ficheiro que tem os 3 algoritmos desenvolvidos que queremos analisar: GraphTopologicalSorting.c
 Queremos analisar a complexidade dos 3 algoritmos desenvolvidos.
@@ -18,6 +18,9 @@ Este ficheiro é constituído por três funções:
         - Em seguida, adicionamos aleatoriamente arestas até o número de arestas no grafo atinjir o valor desejado (numEdges) garantindo que o gráfico não contenha ciclos.
 
         (... Não colocar no relatório o que está em baixo ...)
+
+
+        
           Dentro desse loop, itera sobre todos os vértices (exceto o último, pois o último vértice não tem adjacentes).
           Para cada vértice, decide aleatoriamente se adicionará 0 ou 1 aresta a partir desse vértice.
           Se as condições permitirem (número total de arestas não ultrapassou numEdges e o grau de saída do vértice mais o número de arestas a serem adicionadas não ultrapassam o número total de vértices), então adiciona as arestas aleatórias necessárias.
@@ -43,12 +46,22 @@ Folder onde guardamos os gráficos dos testes realizados: testTopo
     - testTopo/byVertex -> Gráficos onde o número de "vertices" varia. Nestes casos o número de edges é mantido constante.
     - Dentro do Folder byEdge e byVertex guardamos os gráficos nos folders: iterations/operations/time
     
-    - execute_topoTests.sh -> Executa o GraphTestTopo(...(???)) respetivo e envia o output para o ficheiro de texto: data_topoTests.txt. 
+    - execute_topoInsuccessBest.sh , execute_topoInsuccessBest.sh , execute_topoSuccess.sh -> Executa o GraphTestTopo respetivo e envia o output para o ficheiro de texto: data_topoTests.txt. 
+    Nota: execute_topoInsuccessBest.sh apenas recebe 3 argumentos. 
+    As edges são sempre máximas por isso não varia. Variamos apenas os vértices. Portanto não é preciso definir uma OPTION.
+    Como cria um grafo completo o número de edges é definido ("é o que der") portanto não o nºde edges não precisa de ser passado como argumento.
+
     A formatação deste output foi definida em "instrumentation.c" na função InstrPrintTest()
-    - main.m -> Ficheiro matlab que executa o ficheiro "execute_topoTests.sh" e lê do ficheiro "data_topoTests.txt" as variáveis nStudyArray, timeArray, caltimeArray, ITERATIONSArray e OPERATIONSArray.
+    - main.m -> Ficheiro matlab que executa um de 3 ficheiros shells desenvolvidos (ver em baixo) e lê do ficheiro "testTopo/data_topoTests.txt" as variáveis nStudyArray, timeArray, caltimeArray, ITERATIONSArray e OPERATIONSArray.
     - A variável nStudyArray pode ser nVertices ou nEdges pois uma delas vai variando consoante o incremento definido. A outra é mantida constante durante toda a simulação.
 
     Como traçamos os gráficos? Explicação do ficheiro main.m:
+
+    - Variável CASE permite alternar entre os casos diferentes que queremos analisar.
+    CASE == 0 -> Executa "./execute_topoSuccess.sh"
+    CASE == 1 -> Executa "./execute_topoInsuccessWorst.sh"
+    CASE == 2 -> Executa "./execute_topoInsuccessBest.sh"
+
     - Variável OPTION permite escolher se queremos ByEdge ou ByVertex
     - Vão ser passados como argumentos em "execute_topoTests.sh" : edge_min, edge_inc, edge_max, vertex_min, vertex_inc, vertex_max
     - Temos 3 algoritmos distintos. Para distinguirmos os 3 nos gráficos utilizámos 3 cores distintas: colorV1, colorV2 e colorV3
@@ -83,3 +96,10 @@ Folder onde guardamos os gráficos dos testes realizados: testTopo
     - Acho que não iremos usar a terceira secção %% Numero de operacoes relevantes (OPERATIONS) em funcao de n, depende do que o Lavrador disser.
     A lógica é a mesma das secções anteriores.
 
+Nota:
+Algoritmo1:
+O ciclo dos adjacentes vai ser sempre igual. Portanto não incrementámos o contador ITERATIONS neste ciclo for.
+Decidimos não colocar o contador ITERATIONS dentro de GraphRemoveEdge pois seria demasiado complicado mas temos noção que demora bastante tempo.
+Nesse sentido decidimos atribuir um peso de ITERATIONS+=(numVertices-1)/2. O valor máximo de iterações que podem existir é (V-1). Por isso usámos (V-1)/2 como um valor estimado.
+
+De forma a justificarmos os tempos obtidos e o algoritmo 3 ser + rápido

@@ -87,7 +87,7 @@ GraphTopoSort* GraphTopoSortComputeV1(Graph* g) {
   unsigned int numEdges = GraphGetNumEdges(g);
   
   Graph* g_copy = GraphCopy(g); 
-  ITERATIONS+=numVertices+numEdges; // Iterations: V+E
+  ITERATIONS+=numVertices*(numVertices/2)+numEdges; // Iterations: V+E
 
   // index of sequence
   unsigned int s = 0; 

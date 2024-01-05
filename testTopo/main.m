@@ -10,7 +10,7 @@ CASE = 3;
 % 2-> Insucesso - Pior caso
 % 3-> Insucesso - Melhor caso
 
-ONLY = 3;
+ONLY = 1;
 % 1-> Algoritmo 1
 % 2-> Algoritmo 2
 % 3-> Algoritmo 3
@@ -21,9 +21,9 @@ vertex_min = 2;
 vertex_inc = 1;
 vertex_max = 250;
 
-printAll = 1;
+printAll = 0;
 
-colorV1 = "or-"; 
+colorV1 = "o-"; 
 colorV2 = "ob-"; 
 colorV2alternative = "ob-"; % Por causa da sobreposicao no grafico das iteracoes!
 colorV3 = "o-"; % Yellow: "[0.9290 0.6940 0.1250]"
@@ -89,7 +89,7 @@ end
 if (show3)
     hold on;
     % Version 3
-    plot(verticesArray(3:3:end),timeArray(3:3:end),colorV3,'DisplayName',sprintf("Algoritmo 3 - %s",customLegend));
+    plot(verticesArray(3:3:end),timeArray(3:3:end),colorV3,'color',[0.9290 0.6940 0.1250],'DisplayName',sprintf("Algoritmo 3 - %s",customLegend));
 end
 
 grid on
@@ -124,7 +124,7 @@ end
 if (show3)
     hold on;
     % Version 3
-    plot(verticesArray(3:3:end),ITERATIONSArray(3:3:end),colorV3,'DisplayName',sprintf("Algoritmo 3 - %s",customLegend));
+    plot(verticesArray(3:3:end),ITERATIONSArray(3:3:end),colorV3,'color',[0.9290 0.6940 0.1250],'DisplayName',sprintf("Algoritmo 3 - %s",customLegend));
 end
 
 grid on

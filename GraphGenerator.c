@@ -46,13 +46,12 @@ Graph *GraphGenerateTopoInsuccessWorst(unsigned int numVertices)
     GraphAddEdge(G,1,0);
 
     // max number of edges
-    for (unsigned int v = 2; v < numVertices; v++) {
-        for (unsigned int w = v+1; w < numVertices; w++) {
+    for (unsigned int v = numVertices-1; v > 1; v--) {
+        for (unsigned int w = v-1; w > 0; w--) {
             GraphAddEdge(G,v,w); 
         }
     }
     
-
     return G;
 }
 

@@ -13,7 +13,7 @@
 #include "GraphTopologicalSorting.h"
 
 int main(void) {
-  
+#if 1 
   Graph* originalG = GraphGenerateTopoInsuccessBest(4);
 
   GraphDisplay(originalG);
@@ -24,37 +24,40 @@ int main(void) {
 
   GraphTopoSortDestroy(&topoSort);
   GraphDestroy(&originalG);
-  // GraphCopy
-	// Graph* g01 = GraphCreate(6, 1, 1); // (numVertices, isDigraph, isWeighted)
-	// Graph* g01_copy = GraphCopy(g01);
-	// GraphAddWeightedEdge(g01, 1, 2,0);
-	// GraphAddWeightedEdge(g01, 1, 4,0);
-	// GraphAddWeightedEdge(g01, 3, 4,0);
-	// printf("The first graph:\n");
-	// GraphDisplay(g01);
-  // GraphAddWeightedEdge(g01_copy, 2, 4,0.5);
-  // printf("The copy graph:\n");
-  // GraphDisplay(g01_copy);
 
-	// GraphDestroy(&g01);
-	// GraphDestroy(&g01_copy);
+#else  
+  //GraphCopy
+	Graph* g01 = GraphCreate(6, 1, 1); // (numVertices, isDigraph, isWeighted)
+	Graph* g01_copy = GraphCopy(g01);
+	GraphAddWeightedEdge(g01, 1, 2,0);
+	GraphAddWeightedEdge(g01, 1, 4,0);
+	GraphAddWeightedEdge(g01, 3, 4,0);
+	printf("The first graph:\n");
+	GraphDisplay(g01);
+  GraphAddWeightedEdge(g01_copy, 2, 4,0.5);
+  printf("The copy graph:\n");
+  GraphDisplay(g01_copy);
 
-  // // GraphGraphFromFile
-  // printf("\n\n");
-  // FILE* f = fopen("GRAPHS/SWmediumDG.txt","r");
-  // Graph* g02 = GraphFromFile(f);
-  // GraphDisplay(g02);
+	GraphDestroy(&g01);
+	GraphDestroy(&g01_copy);
 
-  // // GraphRemoveEdge
-  // printf("After remove (6,3):\n");
-  // GraphRemoveEdge(g02,6,2);
-  // GraphDisplay(g02);
-  // for (unsigned int i = 0; i < GraphGetNumVertices(g02); i++) {
-  //   GraphListAdjacents(g02, i);
-  // }
+  // GraphGraphFromFile
+  printf("\n\n");
+  FILE* f = fopen("GRAPHS/SWmediumDG.txt","r");
+  Graph* g02 = GraphFromFile(f);
+  GraphDisplay(g02);
 
-  // GraphDestroy(&g02);
-  // fclose(f);
+  // GraphRemoveEdge
+  printf("After remove (6,3):\n");
+  GraphRemoveEdge(g02,6,2);
+  GraphDisplay(g02);
+  for (unsigned int i = 0; i < GraphGetNumVertices(g02); i++) {
+    GraphListAdjacents(g02, i);
+  }
 
+  GraphDestroy(&g02);
+  fclose(f);
+#endif
 	return 0;
 }
+

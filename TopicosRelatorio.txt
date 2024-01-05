@@ -102,4 +102,48 @@ O ciclo dos adjacentes vai ser sempre igual. Portanto não incrementámos o cont
 Decidimos não colocar o contador ITERATIONS dentro de GraphRemoveEdge pois seria demasiado complicado mas temos noção que demora bastante tempo.
 Nesse sentido decidimos atribuir um peso de ITERATIONS+=(numVertices-1)/2. O valor máximo de iterações que podem existir é (V-1). Por isso usámos (V-1)/2 como um valor estimado.
 
-De forma a justificarmos os tempos obtidos e o algoritmo 3 ser + rápido
+
+%% Relatorio
+No ficheiro GraphTopologicalSorting.c estão presentes os 3 algoritmos desenvolvidos.
+Queremos analisar 4 casos para estes algoritmos: Sucesso: 1) Melhor Caso , 2) Pior Caso ; Insucesso: 3) Melhor Caso, 4) Pior Caso
+Para isso tivemos que criar um ficheiro responsável por gerar grafos, GraphGenerator.c, sendo constituído por 4 funções GraphGenerateTopoSuccessWorst, GraphGenerateTopoSuccessBest, GraphGenerateTopoInsuccessBest e GraphGenerateTopoInsuccessWorst.
+Em baixo apresentamos um exemplo de um grafo para cada um dos casos mencionados em cima:
+
+O grafo da Figura a) é um grafo direcionado acíclico (DAG) que apresenta o maior número de arestas possível para um número de vértices V satisfazendo a condição de ter ordenação topológica, sendo por isso o caso Sucesso - WorstCase.
+O grafo da Figura b) não tem nenhuma aresta, sendo por isso o melhor caso possível uma vez que não têm de ser realizadas eliminações.
+O grafo da Figura c) representa o caso Insucesso - WorstCase uma vez que existe um ciclo entre os dois vértices de menor índice.  Para o número de sucessivas
+procuras é preferível não contabilizar os dois vértices de menor índice do que dois de maior índice. Do lado direito do grafo é igual ao exemplo Sucesso - WorstCase uma vez que tem 
+o maior número de arestas possível para V vértices que permitiria o grafo ter uma ordenação topológica (caso não existissem ciclos entre os dois vértices de menor índice). 
+O grafo da Figura d) representa o caso Insucesso - BestCase uma vez que o grafo tem um ciclo contendo todos os vértices com o menor número de arestas possível (V arestas) para V vértices.
+
+%% Como traçar os gráficos?
+De forma a compararmos os tempos de execução para os 3 algoritmos e traçarmos os respetivos gráficos 
+desenvolvemos um script matlab main.m que executa um ficheiro shell e lê do ficheiro "testTopo/data_topoTests.txt" as variáveis nVerticesArray, timeArray, caltimeArray, ITERATIONSArray.
+% Colocar o que metemos no outro relatório
+
+Em baixo apresentamos os tempos de execucao em funcao do número de vértices para os três algoritmos para os 4 diferentes casos.
+Na realização destes testes comentámos os assert(GraphCheckInvariants(g)) para não condicionar o tempo de execução. 
+Colocar Figura a), b), c), d).
+
+Como pudemos constatar pelos resultados, o algoritmo 3 é o mais rápido e o algoritmo 1 é o mais lento. 
+De forma a justificarmos os tempos obtidos decidimos analisar o número de ITERATIONS em cada algoritmo.
+Iremos explicar de seguida que ITERATIONS considerámos em cada algoritmo.
+No algoritmo 1 considerámos: 1) Criação da cópia do grafo; 2) Sucessivas procuras através do conjunto de vértices; 3) Nºde eliminações
+No algoritmo 2 considerámos: 1) Inicialização do array; 2) Sucessivas procuras através do conjunto de vértices; 3) Nºde eliminações
+No algoritmo 3 considerámos: 1) Inicialização da fila; 2) Sucessivas procuras através do conjunto de vértices; 3) Nºde eliminações
+
+Portanto chegámos às seguintes expressões do número de iterações:
+(Colocar na Tabela que eu mandei ao Professor.)
+    - Sucesso - WorstCase: 
+    - Sucesso - BestCase:
+    - Insucesso - WorstCase:
+    - Insucesso - BestCase:
+
+Em baixo apresentamos as deduções das expressões da tabela:
+
+Em baixo apresentamos o número de iterações em funcao do número de vértices para os três algoritmos para os 4 diferentes casos.
+Colocar Figura a), b), c), d).
+Como pudemos constatar pelos resultados, o algoritmo 3 é o que tem menor número de iterações em todos os casos, excepto no Sucesso - BestCase uma vez que o número de iterações 
+é igual para os 3 algoritmos, justificando assim ser o algoritmo mais rápido.
+No caso Sucesso - BestCase apesar do número de iterações serem as mesmas para o algoritmo 1 e para o algoritmo 2 por causa
+da aproximação

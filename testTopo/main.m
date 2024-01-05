@@ -4,13 +4,13 @@ caseNames = ["Sucesso (Pior caso)", "Sucesso (Melhor caso)","Insucesso (Pior cas
 caseFileNames = ["Success_worstCase_", "Success_bestCase_","Insuccess_worstCase_", "Insuccess_bestCase_"];
 casePathNames = ["SuccessWorst", "SuccessBest","InsuccessWorst", "InsuccessBest"];
 
-CASE = 0;
+CASE = 3;
 % 0-> Sucesso - Pior caso
 % 1-> Sucesso - Melhor caso
 % 2-> Insucesso - Pior caso
 % 3-> Insucesso - Melhor caso
 
-ONLY = 3;
+ONLY = 1;
 % 1-> Algoritmo 1
 % 2-> Algoritmo 2
 % 3-> Algoritmo 3
@@ -23,8 +23,8 @@ vertex_max = 250;
 
 printAll = 0;
 
-colorV1 = "or-"; % Red: "#A2142F"
-colorV2 = "ob-"; % Blue: "#0072BD"
+colorV1 = "o-"; 
+colorV2 = "ob-"; 
 colorV2alternative = "ob-"; % Por causa da sobreposicao no grafico das iteracoes!
 colorV3 = "o-"; % Yellow: "[0.9290 0.6940 0.1250]"
 
@@ -72,6 +72,7 @@ ITERATIONSArray = double(data{4}); % 2
 f1_time = figure(1);
 
 if (show1)
+    hold on;
     %Version 1
     plot(verticesArray(1:3:end),timeArray(1:3:end),colorV1,'DisplayName',sprintf("Algoritmo 1 - %s",customLegend));
 end
@@ -85,7 +86,7 @@ end
 if (show3)
     hold on;
     % Version 3
-    plot(verticesArray(3:3:end),timeArray(3:3:end),'color',[0.9290 0.6940 0.1250],'DisplayName',sprintf("Algoritmo 3 - %s",customLegend));
+    plot(verticesArray(3:3:end),timeArray(3:3:end),colorV3,'color',[0.9290 0.6940 0.1250],'DisplayName',sprintf("Algoritmo 3 - %s",customLegend));
 end
 
 grid on
@@ -106,6 +107,7 @@ end
 f2_iterations = figure(2);
 
 if (show1)
+    hold on;
     %Version 1
     plot(verticesArray(1:3:end),ITERATIONSArray(1:3:end),colorV1,'DisplayName',sprintf("Algoritmo 1 - %s",customLegend));
 end
@@ -119,7 +121,7 @@ end
 if (show3)
     hold on;
     % Version 3
-    plot(verticesArray(3:3:end),ITERATIONSArray(3:3:end),'color',[0.9290 0.6940 0.1250],colorV3,'DisplayName',sprintf("Algoritmo 3 - %s",customLegend));
+    plot(verticesArray(3:3:end),ITERATIONSArray(3:3:end),colorV3,'color',[0.9290 0.6940 0.1250],'DisplayName',sprintf("Algoritmo 3 - %s",customLegend));
 end
 
 grid on

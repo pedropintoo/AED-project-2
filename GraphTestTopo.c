@@ -1,7 +1,7 @@
 //
 // Algoritmos e Estruturas de Dados --- 2023/2024
 //
-// Pedro Pinto, Dez 2023
+// Pedro Pinto / João Pinto, Dez 2023
 //
 // Graph EXAMPLE
 //

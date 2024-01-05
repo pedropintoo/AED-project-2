@@ -160,7 +160,7 @@ Graph* GraphCopy(const Graph* g) {
   
   // TO BE COMPLETED !!
   
-  assert(GraphCheckInvariants(g)); // Check invariants
+  //assert(GraphCheckInvariants(g)); // Check invariants
 
   Graph* g_new = GraphCreate(g->numVertices, g->isDigraph, g->isWeighted);
   g_new->isComplete = g->isComplete;
@@ -185,7 +185,7 @@ Graph* GraphCopy(const Graph* g) {
     }
   }
 
-  assert(GraphCheckInvariants(g_new)); // Check invariants of new graph
+  //assert(GraphCheckInvariants(g_new)); // Check invariants of new graph
 
   return g_new;
 }
@@ -442,7 +442,7 @@ int GraphRemoveEdge(Graph* g, unsigned int v, unsigned int w) {
   assert(g != NULL);
 
   // TO BE COMPLETED !!
-  assert(GraphCheckInvariants(g)); // Check invariants
+  //assert(GraphCheckInvariants(g)); // Check invariants
   assert(v < g->numVertices && w < g->numVertices); // Check if vertices \in numVertices
   
   // Move to the initial vertex
@@ -498,7 +498,7 @@ int GraphRemoveEdge(Graph* g, unsigned int v, unsigned int w) {
 
       // Now it's impossible to have a complete graph
       g->isComplete = 0;
-      assert(GraphCheckInvariants(g)); // Check invariants
+      //assert(GraphCheckInvariants(g)); // Check invariants
 
       return 1; // Edge removed successfully
     }

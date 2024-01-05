@@ -18,11 +18,14 @@
 
 typedef GraphTopoSort* (*TopoSortFcn)(Graph*);
 
-// Pointers to Topological Sort Functions
-TopoSortFcn topoSortFcns[VERSIONS] = {
-  GraphTopoSortComputeV1,
-  GraphTopoSortComputeV2,
-  GraphTopoSortComputeV3
+typedef Graph* (*TopoGeneFcn)(unsigned int);
+
+// Pointers to Topological Generate Functions
+TopoGeneFcn topoGeneFcns[4] = {
+  GraphGenerateTopoSuccessWorst,
+  GraphGenerateTopoSuccessBest,
+  GraphGenerateTopoInsuccessWorst,
+  GraphGenerateTopoInsuccessBest
 };
 
 // Pointers to Topological Sort Functions
@@ -34,7 +37,10 @@ TopoSortFcn topoSortFcns[VERSIONS] = {
 
 int main(int argc, char* argv[]) {
 
-  assert(argc == 5);
+  if (argc < 5) {
+    fprintf(stderr, "Usage: %s CASE MIN_VERTICES INC_VERTICES MAX_VERTICES\n", argv[0]);
+    exit(1);
+  }
 
   TopoInit();
 
@@ -43,81 +49,23 @@ int main(int argc, char* argv[]) {
   unsigned int INC_VERTICES = atoi(argv[3]); // increment for the for loop
   unsigned int MAX_VERTICES = atoi(argv[4]); // end for the for loop
 
-  switch (CASE)
-  {
-  case 0: // Success: Worst Case
-    for (int numVertices = MIN_VERTICES; numVertices <= INC_VERTICES; numVertices+= MAX_VERTICES) {
-  
-      Graph* G = GraphGenerateTopoSuccessWorst(numVertices); // Generate Success Worst Case Graph
-      
-      for (int version = 0; version < VERSIONS; version++) {
-        TopoSortFcn sortFcn = topoSortFcns[version];
-        
-        InstrReset();
-        GraphTopoSort* result = sortFcn(G); // Execute sort algorithm in all versions
-        InstrPrintTest(numVertices);  // Display the table
+  for (unsigned int numVertices = MIN_VERTICES; numVertices <= MAX_VERTICES; numVertices+= INC_VERTICES) {
 
-        GraphTopoSortDestroy(&result);
-      }
+    TopoGeneFcn geneFcn = topoGeneFcns[CASE]; // select function to generate the correct case graph
+    Graph* G = geneFcn(numVertices); // generate the correct case graph
+
+    for (int version = 0; version < VERSIONS; version++) {
+      TopoSortFcn sortFcn = topoSortFcns[version];
       
-      GraphDestroy(&G);
+      InstrReset();
+      GraphTopoSort* result = sortFcn(G); // Execute sort algorithm in all versions
+      InstrPrintTest(numVertices);  // Display the table
+
+      GraphTopoSortDestroy(&result);
     }
-    break;
-  case 1: // Success: Best Case
-    for (int numVertices = MIN_VERTICES; numVertices <= INC_VERTICES; numVertices+= MAX_VERTICES) {
     
-      Graph* G = GraphGenerateTopoSuccessBest(numVertices); // Generate Success Best Case Graph
-      
-      for (int version = 0; version < VERSIONS; version++) {
-        TopoSortFcn sortFcn = topoSortFcns[version];
-        
-        InstrReset();
-        GraphTopoSort* result = sortFcn(G); // Execute sort algorithm in all versions
-        InstrPrintTest(numVertices);  // Display the table
-
-        GraphTopoSortDestroy(&result);
-      }
-      
-      GraphDestroy(&G);
-    }
-    break;
-  case 2: // Insuccess: Worst Case
-    for (int numVertices = MIN_VERTICES; numVertices <= INC_VERTICES; numVertices+= MAX_VERTICES) {
-    
-      Graph* G = GraphGenerateTopoInsuccessWorst(numVertices); // Generate Insuccess Worst Case Graph
-      
-      for (int version = 0; version < VERSIONS; version++) {
-        TopoSortFcn sortFcn = topoSortFcns[version];
-        
-        InstrReset();
-        GraphTopoSort* result = sortFcn(G); // Execute sort algorithm in all versions
-        InstrPrintTest(numVertices);  // Display the table
-
-        GraphTopoSortDestroy(&result);
-      }
-      
-      GraphDestroy(&G);
-    }
-    break;
-  case 3: // Insuccess: Best Case
-    for (int numVertices = MIN_VERTICES; numVertices <= INC_VERTICES; numVertices+= MAX_VERTICES) {
-    
-      Graph* G = GraphGenerateTopoInsuccessWorst(numVertices); // Generate Insuccess Worst Case Graph
-      
-      for (int version = 0; version < VERSIONS; version++) {
-        TopoSortFcn sortFcn = topoSortFcns[version];
-        
-        InstrReset();
-        GraphTopoSort* result = sortFcn(G); // Execute sort algorithm in all versions
-        InstrPrintTest(numVertices);  // Display the table
-
-        GraphTopoSortDestroy(&result);
-      }
-      
-      GraphDestroy(&G);
-    }
-    break;
+    GraphDestroy(&G);
   }
-
+ 
 	return 0;
 }

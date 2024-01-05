@@ -13,49 +13,62 @@
 
 #include "Graph.h"
 
-Graph *GraphGenerateTopoSuccess(unsigned int numVertices, unsigned int numEdges)
-{
-    assert(numEdges <= numVertices*(numVertices-1)/2 - 2*(numVertices-2)); // Max number of edges
-    assert(numEdges > 0);
+Graph *GraphGenerateTopoSuccessWorst(unsigned int numVertices)
+{   
+    // Generate a Digraph with max number of edges (Success: WC)
+    Graph* G = GraphCreate(numVertices, 1, 0);
 
-    Graph* g = GraphCreate(numVertices, 1, 0);
-    srand(time(NULL));
-
-    GraphAddEdge(g,0,1); 
-
-    while (GraphGetNumEdges(g) != numEdges) {
-        for (unsigned int v = 2; v < numVertices - 1; v++) { // last vertex don't have adjacents
-
-            unsigned int numAddEdge = rand() % 2;
-
-            if (GraphGetNumEdges(g) + numAddEdge > numEdges) continue; // not possible
-            if (GraphGetVertexOutDegree(g,v) + numAddEdge >= numVertices - v) continue;
-
-            unsigned int counter = 0;
-            while(counter < numAddEdge) {
-                
-                unsigned int w = rand() % (numVertices-1-v) + 1 + v;
-
-                if(GraphAddEdge(g,v,w)) counter++;  // vertex added!
-
-            }
+    for (unsigned int v = 0; v < numVertices; v++) {
+        for (unsigned int w = v+1; w < numVertices; w++) {
+            GraphAddEdge(G,v,w); 
         }
     }
 
-    return g;
+    return G;
+}
+
+Graph *GraphGenerateTopoSuccessBest(unsigned int numVertices) {
+    // Generate a Digraph with only vertices (Success: BC)
+    Graph* G = GraphCreate(numVertices,1,0);
+    return G;
+}
+
+Graph *GraphGenerateTopoInsuccessWorst(unsigned int numVertices)
+{   
+    // Generate a Digraph with 2 components disconnected, the first one with a loop in the 2 vertices with less index
+    // and the second one with max number of edges (Insuccess: WC)
+    Graph* G = GraphCreate(numVertices,1,0);
+
+    if (numVertices < 2) return G; // Impossible to have Insuccess with less than 2 vertex
+
+    // loop in the 2 vertices with less index
+    GraphAddEdge(G,0,1);
+    GraphAddEdge(G,1,0);
+
+    // max number of edges
+    for (unsigned int v = 2; v < numVertices; v++) {
+        for (unsigned int w = v+1; w < numVertices; w++) {
+            GraphAddEdge(G,v,w); 
+        }
+    }
+    
+
+    return G;
 }
 
 Graph *GraphGenerateTopoInsuccessBest(unsigned int numVertices)
-{
-    // Generate a complete digraph
-    return GraphCreateComplete(numVertices, 1);
-}
-
-Graph *GraphGenerateTopoInsuccessWorst(unsigned int numVertices, unsigned int numEdges)
 {   
-    Graph* originalG = GraphGenerateTopoSuccess(numVertices,numEdges-1);
+    // Generate a Digraph with a loop including all vertices with less edges possible (Insuccess: BC)
+    Graph* G = GraphCreate(numVertices,1,0);
 
-    GraphAddEdge(originalG,1,0); // add loop in 2 lowest id vertices 
+    if (numVertices < 2) return G; // Impossible to have Insuccess with less than 2 vertex
 
-    return originalG;
+    for (unsigned int v = 0; v < numVertices; v++) {
+        if (v+1 == numVertices) { // last vertex case
+            if (v != 0) GraphAddEdge(G,v,0); // check if is a self-loop
+        }
+        else GraphAddEdge(G,v,v+1); 
+    }
+
+    return G;
 }

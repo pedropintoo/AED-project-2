@@ -10,10 +10,12 @@
 
 #include "Graph.h"
 
-Graph* GraphGenerateTopoSuccess(unsigned int numVertices, unsigned int numEdges);
+Graph* GraphGenerateTopoSuccessWorst(unsigned int numVertices);
+
+Graph* GraphGenerateTopoSuccessBest(unsigned int numVertices);
+
+Graph* GraphGenerateTopoInsuccessWorst(unsigned int numVertices);
 
 Graph* GraphGenerateTopoInsuccessBest(unsigned int numVertices);
-
-Graph* GraphGenerateTopoInsuccessWorst(unsigned int numVertices, unsigned int numEdges);
 
 #endif  //_GRAPH_GENERATOR_
